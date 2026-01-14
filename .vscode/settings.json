@@ -25,6 +25,22 @@
 		{
 			"splitTerminals": [
 				{
+					"name": "core",
+					"commands": ["cd core", "clear"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "core:test",
+					"commands": ["yarn test"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
 					"name": "phaser",
 					"commands": ["cd phaser", "clear"]
 				}

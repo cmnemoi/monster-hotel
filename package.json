@@ -14,9 +14,11 @@
 		"format": "biome format --write ."
 	},
 	"imports": {
+		"#core/*": "./core/src/*",
 		"#phaser/*": "./phaser/src/*"
 	},
 	"workspaces": [
+		"core",
 		"phaser"
 	],
 	"packageManager": "yarn@4.12.0",

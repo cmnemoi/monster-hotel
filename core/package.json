@@ -1,0 +1,21 @@
+{
+	"name": "@monster-hotel/core",
+	"version": "0.1.0",
+	"private": true,
+	"license": "AGPL-3.0-or-later",
+	"type": "module",
+	"scripts": {
+		"format": "biome format --write .",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"test": "vitest",
+		"test:ci": "vitest run"
+	},
+	"imports": {
+		"#core/*": "./src/*"
+	},
+	"packageManager": "yarn@4.12.0",
+	"devDependencies": {
+		"vitest": "^4.0.17"
+	}
+}

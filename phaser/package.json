@@ -1,5 +1,5 @@
 {
-	"name": "@teacher-story/phaser",
+	"name": "@monster-hotel/phaser",
 	"version": "0.1.0",
 	"private": true,
 	"license": "AGPL-3.0-or-later",
@@ -19,7 +19,8 @@
 		"vite": "^7.3.1"
 	},
 	"imports": {
-		"#phaser/*": "./src/*"
+		"#phaser/*": "./src/*",
+		"#core/*": "../../core/src/*"
 	},
 	"packageManager": "yarn@4.12.0"
 }
