@@ -1,0 +1,50 @@
+{
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.pnp.*": true
+	},
+	"typescript.tsdk": ".yarn/sdks/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.biome": "explicit",
+			"source.organizeImports.biome": "explicit"
+		},
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"biome.requireConfiguration": true,
+	"restoreTerminals.terminals": [
+		{
+			"splitTerminals": [
+				{
+					"name": "root"
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "phaser",
+					"commands": ["cd phaser", "clear"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "watch",
+					"commands": ["yarn dev"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "opencode",
+					"commands": ["opencode"]
+				}
+			]
+		}
+	]
+}

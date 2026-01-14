@@ -1,0 +1,1 @@
+Find rules for AI agents in [./ai/rules](./ai/rules).
