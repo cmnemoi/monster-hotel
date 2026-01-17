@@ -7,11 +7,13 @@
 	"scripts": {
 		"phaser:dev": "cd phaser && yarn dev",
 		"phaser:build": "cd phaser && yarn build",
+		"phaser:test": "cd phaser && yarn vitest",
 		"dev": "yarn phaser:dev",
 		"build": "yarn phaser:build",
 		"check": "biome check .",
 		"lint": "biome check --write .",
-		"format": "biome format --write ."
+		"format": "biome format --write .",
+		"test": "yarn phaser:test"
 	},
 	"imports": {
 		"#core/*": "./core/src/*",

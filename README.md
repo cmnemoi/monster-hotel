@@ -2,10 +2,10 @@
 
 # Installation
 
-We will use [`mise`](https://mise.dev) to handle our dependencies.
+We will use [`mise`](https://mise.jdx.dev/) to handle our dependencies.
 
 ```
-git clone https://github.com/cmnemoi/monster-hotel.git
+git clone https://github.com/cmnemoi/monster-hotel.git && cd monster-hotel
 curl https://mise.run | sh
 echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
 source ~/.bashrc
