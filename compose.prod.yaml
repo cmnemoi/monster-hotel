@@ -2,6 +2,7 @@ name: monster-hotel
 
 services:
   website:
+    container_name: monster-hotel-website
     image: ghcr.io/cmnemoi/monster-hotel:${IMAGE_TAG:-main}
     restart: unless-stopped
     networks:
