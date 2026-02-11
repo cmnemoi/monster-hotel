@@ -12,15 +12,12 @@
 		"build": "yarn phaser:build",
 		"check": "biome check .",
 		"lint": "biome check --write .",
-		"format": "biome format --write .",
-		"test": "yarn phaser:test"
+		"format": "biome format --write ."
 	},
 	"imports": {
-		"#core/*": "./core/src/*",
-		"#phaser/*": "./phaser/src/*"
+		"#phaser/*": "./phaser/*.js"
 	},
 	"workspaces": [
-		"core",
 		"phaser"
 	],
 	"packageManager": "yarn@4.12.0",
@@ -30,6 +27,7 @@
 	},
 	"engines": {
 		"node": ">=24 <25",
-		"npm": "please-use-yarn"
+		"npm": "please use yarn",
+		"pnpm": "please use yarn"
 	}
 }

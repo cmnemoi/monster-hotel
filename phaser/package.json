@@ -10,7 +10,8 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",
-		"test": "vitest run"
+		"test": "vitest run",
+		"test:watch": "vitest watch"
 	},
 	"dependencies": {
 		"phaser": "^3.90.0",
@@ -21,8 +22,7 @@
 		"vitest": "^4.0.17"
 	},
 	"imports": {
-		"#phaser/*": "./src/*",
-		"#core/*": "../../core/src/*"
+		"#phaser/*": "./src/*.ts"
 	},
 	"packageManager": "yarn@4.12.0"
 }

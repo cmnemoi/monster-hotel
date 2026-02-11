@@ -31,5 +31,5 @@
 		"allowUnreachableCode": false,
 		"noErrorTruncation": true
 	},
-	"include": ["phaser/src"]
+	"include": ["./backend/**/*.ts", "./core/**/*.ts", "./phaser/**/*.ts"]
 }

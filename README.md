@@ -9,11 +9,12 @@ git clone https://github.com/cmnemoi/monster-hotel.git && cd monster-hotel
 curl https://mise.run | sh
 echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
 source ~/.bashrc
+mise trust
 mise install
 yarn dev
 ```
 
-You should now be able to access the game at http://localhost:8080.
+You should now be able to access the game at http://localhost:5173
 
 # License
 

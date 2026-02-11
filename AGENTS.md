@@ -5,7 +5,7 @@ Monster Hotel is a hotel management game. The `phaser/` folder contains a front-
 Work exclusively in [TDD](.ai/rules/tdd.md).
 
 ## Commands
-- `yarn dev` - Start dev server (http://localhost:8080)
+- `yarn dev` - Start dev server (http://localhost:5173) - Check server is launched before running this command
 - `yarn build` - Build production
 - `yarn lint` - Lint with Biome
 - `yarn check` - Check code with Biome

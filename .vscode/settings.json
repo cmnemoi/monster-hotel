@@ -33,6 +33,30 @@
 		{
 			"splitTerminals": [
 				{
+					"name": "core:test",
+					"commands": ["cd core", "yarn test"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "backend",
+					"commands": ["cd backend", "clear"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "backend:test",
+					"commands": ["cd backend", "yarn test:watch"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
 					"name": "phaser",
 					"commands": ["cd phaser", "clear"]
 				}
@@ -51,6 +75,14 @@
 				{
 					"name": "opencode",
 					"commands": ["opencode"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
+					"name": "amp",
+					"commands": ["amp"]
 				}
 			]
 		}
