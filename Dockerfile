@@ -1,5 +1,7 @@
 FROM node:24-alpine AS build
 
+RUN apk update && apk upgrade
+
 WORKDIR /app
 
 COPY package.json yarn.lock .yarnrc.yml ./
