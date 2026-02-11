@@ -44,10 +44,10 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 	}
 
 	override update(_time: number, delta: number): void {
-		const update = this.movement.update(delta, this.animation.getY());
+		const movement = this.movement.update(delta, this.animation.getY());
 
-		this.x = update.containerX;
-		this.animation.update(update);
+		this.x = movement.containerX;
+		this.animation.update(movement);
 	}
 
 	private static getConfigFromType(clientType: ClientType): ClientSpriteConfig {

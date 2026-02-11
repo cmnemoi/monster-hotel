@@ -4,7 +4,6 @@ import type { ClientSpriteConfig } from "./ClientSpriteRegistry";
 type ClientState = "idle" | "walk" | "sleep";
 
 type FrameData = {
-	spriteSourceSizeY?: number;
 	sourceSize?: { h?: number };
 };
 
@@ -105,9 +104,8 @@ export class ClientAnimation {
 		frame: Phaser.Textures.Frame,
 	): number {
 		const frameData = (frame as unknown as { data: FrameData }).data;
-		const spriteSourceSizeY = frameData?.spriteSourceSizeY ?? 0;
 		const sourceHeight = frameData?.sourceSize?.h ?? frame.height;
 		const realHeight = frame.height;
-		return sourceHeight - spriteSourceSizeY - realHeight;
+		return sourceHeight - realHeight;
 	}
 }

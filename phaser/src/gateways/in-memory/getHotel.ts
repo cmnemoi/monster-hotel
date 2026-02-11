@@ -4,8 +4,15 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 	return {
 		gold: 1_000,
 		rooms: {
+			lobby: {
+				id: "lobby",
+				type: "lobby",
+				position: { x: 0, y: -1 },
+				client: null,
+			},
 			room_1: {
 				id: "room_1",
+				type: "bedroom",
 				position: { x: 0, y: 0 },
 				client: {
 					name: "client1",
@@ -17,6 +24,7 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 			},
 			room_2: {
 				id: "room_2",
+				type: "bedroom",
 				position: { x: 0, y: 1 },
 				client: {
 					name: "client2",
@@ -28,11 +36,13 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 			},
 			room_3: {
 				id: "room_3",
+				type: "bedroom",
 				position: { x: 1, y: 0 },
 				client: null,
 			},
 			room_4: {
 				id: "room_4",
+				type: "bedroom",
 				position: { x: 1, y: 1 },
 				client: null,
 			},

@@ -22,6 +22,8 @@ export type ClientType =
 
 export type ClientEffect = "heat" | "cold" | "odor" | "noise" | "sunlight";
 
+export type RoomType = "bedroom" | "lobby";
+
 export type Hotel = {
 	gold: integer;
 	rooms: Record<string, Room>;
@@ -30,6 +32,7 @@ export type Hotel = {
 
 export type Room = {
 	id: string;
+	type: RoomType;
 	position: { x: integer; y: integer };
 	client: Client | null;
 };

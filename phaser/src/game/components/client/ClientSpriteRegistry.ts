@@ -30,4 +30,14 @@ export const CLIENT_SPRITE_REGISTRY: Record<string, ClientSpriteConfig> = {
 		idleFrameRate: 15,
 		walkFrameRate: 30,
 	},
+	"nice neighbour": {
+		atlasKey: "monsters1.hd",
+		idlePrefix: "monsterEmpathy/monsterEmpathyIdle_",
+		walkPrefix: "monsterEmpathy/monsterEmpathyIdle_",
+		idleFrameCount: 9,
+		walkFrameCount: 9,
+		scale: 1,
+		idleFrameRate: 15,
+		walkFrameRate: 15,
+	},
 };

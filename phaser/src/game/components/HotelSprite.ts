@@ -1,7 +1,8 @@
 import type { Hotel } from "#phaser/models";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import type { Position } from "../types";
-import { RoomSprite } from "./RoomSprite";
+import { createRoomSprite } from "./createRoomSprite";
+import type { RoomSprite } from "./RoomSprite";
 
 export class HotelSprite extends Phaser.GameObjects.Container {
 	private roomsById = new Map<string, RoomSprite>();
@@ -30,7 +31,7 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 			let roomSprite = this.roomsById.get(room.id);
 
 			if (!roomSprite) {
-				roomSprite = new RoomSprite(this.scene, room);
+				roomSprite = createRoomSprite(this.scene, room, state.clientQueue);
 				this.roomsById.set(room.id, roomSprite);
 				this.add(roomSprite);
 			} else {
