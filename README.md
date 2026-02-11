@@ -7,10 +7,11 @@ We will use [`mise`](https://mise.jdx.dev/) to handle our dependencies.
 ```
 git clone https://github.com/cmnemoi/monster-hotel.git && cd monster-hotel
 curl https://mise.run | sh
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-source ~/.bashrc
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc # or ~/.zshrc if you use it
+source ~/.bashrc # or ~/.zshrc if you use it
 mise trust
 mise install
+yarn install
 yarn dev
 ```
 
