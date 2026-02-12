@@ -1,0 +1,40 @@
+phaser/src/game/components/HotelSprite.ts
+  56bae7637232c762 4,6,29
+phaser/src/game/components/createRoomSprite.ts
+  56bae7637232c762 1-24
+phaser/src/game/components/RoomSprite.ts
+  56bae7637232c762 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.2",
+  "base_commit_sha": "75db8be016b486c42d2834af1543964a40608d42",
+  "prompts": {
+    "56bae7637232c762": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3ac58d85effe6mUbWCGNvSPJHk",
+        "model": "opencode/kimi-k2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 52,
+      "total_deletions": 48,
+      "accepted_lines": 28,
+      "overriden_lines": 0
+    },
+    "9002a87d6374ce87": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3ac5748e1ffenWEfxaBQYsA6Tx",
+        "model": "opencode/kimi-k2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 43,
+      "total_deletions": 0,
+      "accepted_lines": 43,
+      "overriden_lines": 0
+    }
+  }
+}
