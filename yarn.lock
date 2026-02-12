@@ -351,7 +351,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@monster-hotel/phaser@workspace:phaser"
   dependencies:
-    phaser: "npm:^3.90.0"
+    phaser: "github:cmnemoi-oss/phaser#6791bd01f0d300d5cb3e96b4954d5a2507c32138"
     terser: "npm:^5.44.1"
     vite: "npm:^7.3.1"
     vitest: "npm:^4.0.17"
@@ -1233,12 +1233,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"phaser@npm:^3.90.0":
+"phaser@github:cmnemoi-oss/phaser#6791bd01f0d300d5cb3e96b4954d5a2507c32138":
   version: 3.90.0
-  resolution: "phaser@npm:3.90.0"
+  resolution: "phaser@https://github.com/cmnemoi-oss/phaser.git#commit=6791bd01f0d300d5cb3e96b4954d5a2507c32138"
   dependencies:
     eventemitter3: "npm:^5.0.1"
-  checksum: 10c0/43d405832fc84c8641e22842fe8d4ca954950ffde364bfb60e4d07b05a29f33eb0c9d4a64acda088122ee6649b7b3ed6d9b3b99bbb67671a528c6ceb10d71689
+  checksum: 10c0/6526280275d4479a19963e9831eb2b9d360579121a451905831f8d0cb1d65cb2aeec8be474e7fc54a06750ebef02f0d7d8b9e44e545977e342b147e90a7d7af8
   languageName: node
   linkType: hard
 

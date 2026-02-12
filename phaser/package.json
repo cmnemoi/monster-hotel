@@ -14,7 +14,7 @@
 		"test:watch": "vitest watch"
 	},
 	"dependencies": {
-		"phaser": "^3.90.0",
+		"phaser": "github:cmnemoi-oss/phaser#6791bd01f0d300d5cb3e96b4954d5a2507c32138",
 		"terser": "^5.44.1"
 	},
 	"devDependencies": {

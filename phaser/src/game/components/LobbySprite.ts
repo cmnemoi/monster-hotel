@@ -41,8 +41,8 @@ export class LobbySprite extends RoomSprite {
 		this.lobbyWidthInPixels = this.computeLobbyWidth();
 
 		this.buildBackground();
-		this.buildDesk();
 		this.buildGroomCat();
+		this.buildDesk();
 		this.buildDecorations();
 		this.buildWaitingQueue();
 		this.buildQueueClients();
@@ -133,15 +133,8 @@ export class LobbySprite extends RoomSprite {
 		}
 
 		const groom = this.scene.add.sprite(
-			20,
-			this.getSpriteBottomPaddingFromFrame(
-				this.scene.textures.getFrame(
-					GROOM_ATLAS_KEY,
-					"groomCatIdle/groomCatIdle_0000",
-				),
-			) -
-				PADDING -
-				GROOM_CHAIR_OFFSET_Y,
+			100,
+			-PADDING - GROOM_CHAIR_OFFSET_Y,
 			GROOM_ATLAS_KEY,
 			"groomCatIdle/groomCatIdle_0000",
 		);
@@ -248,9 +241,7 @@ export class LobbySprite extends RoomSprite {
 		const firstFrame = `${config.idlePrefix}0000`;
 		const sprite = this.scene.add.sprite(
 			positionX,
-			this.getSpriteBottomPaddingFromFrame(
-				this.scene.textures.getFrame(config.atlasKey, firstFrame),
-			) - PADDING,
+			-PADDING,
 			config.atlasKey,
 			firstFrame,
 		);
@@ -259,20 +250,5 @@ export class LobbySprite extends RoomSprite {
 		sprite.setFlipX(true);
 		sprite.play(animKey);
 		return sprite;
-	}
-
-	private getSpriteBottomPaddingFromFrame(
-		frame: Phaser.Textures.Frame,
-	): number {
-		const frameData = (
-			frame as unknown as {
-				data: {
-					sourceSize?: { h?: number };
-				};
-			}
-		).data;
-		const sourceHeight = frameData?.sourceSize?.h ?? frame.height;
-		const realHeight = frame.height;
-		return sourceHeight - realHeight;
 	}
 }

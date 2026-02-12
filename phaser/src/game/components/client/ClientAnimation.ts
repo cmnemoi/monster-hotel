@@ -3,10 +3,6 @@ import type { ClientSpriteConfig } from "./ClientSpriteRegistry";
 
 type ClientState = "idle" | "walk" | "sleep";
 
-type FrameData = {
-	sourceSize?: { h?: number };
-};
-
 export class ClientAnimation {
 	private readonly sprite: Phaser.GameObjects.Sprite;
 	private readonly config: ClientSpriteConfig;
@@ -29,9 +25,7 @@ export class ClientAnimation {
 		this.sprite = new Phaser.GameObjects.Sprite(
 			scene,
 			0,
-			this.getSpriteBottomPaddingFromFrame(
-				scene.textures.getFrame(config.atlasKey, firstIdleFrame),
-			),
+			0,
 			config.atlasKey,
 			firstIdleFrame,
 		);
@@ -43,10 +37,6 @@ export class ClientAnimation {
 		this.sprite.setPosition(update.spriteX, update.spriteY);
 		this.play(update.state);
 		this.sprite.setFlipX(update.flipX);
-	}
-
-	getY(): number {
-		return this.getSpriteBottomPaddingFromFrame(this.sprite.frame);
 	}
 
 	getPhaserSprite(): Phaser.GameObjects.Sprite {
@@ -98,14 +88,5 @@ export class ClientAnimation {
 
 		const animKey = state === "walk" ? this.walkAnimKey : this.idleAnimKey;
 		this.sprite.play(animKey, true);
-	}
-
-	private getSpriteBottomPaddingFromFrame(
-		frame: Phaser.Textures.Frame,
-	): number {
-		const frameData = (frame as unknown as { data: FrameData }).data;
-		const sourceHeight = frameData?.sourceSize?.h ?? frame.height;
-		const realHeight = frame.height;
-		return sourceHeight - realHeight;
 	}
 }

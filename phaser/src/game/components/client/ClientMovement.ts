@@ -38,13 +38,13 @@ export class ClientMovement {
 		this.startWaiting();
 	}
 
-	update(delta: number, movementY: number): MovementUpdate {
+	update(delta: number): MovementUpdate {
 		let spriteX = 0;
-		let spriteY = movementY;
+		let spriteY = 0;
 
 		if (this.isWaiting && this.state === "idle") {
 			spriteX = Math.sin(delta * 0.07 + this.clientId * 0.2) * 9;
-			spriteY = movementY + Math.cos(delta * 0.1 + this.clientId * 0.3) * 10;
+			spriteY = Math.cos(delta * 0.1 + this.clientId * 0.3) * 10;
 		}
 
 		if (!this.isWaiting) {
