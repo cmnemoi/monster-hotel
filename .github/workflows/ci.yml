@@ -14,15 +14,20 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Read Node version from package.json
+      - name: Get Node version
         id: node-version
         run: |
           NODE_VERSION=$(jq -r '.engines.node' package.json | grep -oE '[0-9]+' | head -1)
           echo "value=$NODE_VERSION" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.node-version.outputs.value }}
           cache: 'yarn'
@@ -39,13 +44,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read Node version from package.json
+      - name: Get Node version
         id: node-version
         run: |
           NODE_VERSION=$(jq -r '.engines.node' package.json | grep -oE '[0-9]+' | head -1)
           echo "value=$NODE_VERSION" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.node-version.outputs.value }}
           cache: 'yarn'
