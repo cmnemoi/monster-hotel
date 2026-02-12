@@ -14,10 +14,7 @@ const PADDING = 10;
 const LOBBY_BACKGROUND_WIDTH = 512;
 
 const QUEUE_START_X = 400;
-const SLOT_WIDTH = 150;
 const END_PILLAR_WIDTH = 300;
-
-const WAITING_PILLAR_WIDTH = 42;
 
 const GROOM_IDLE_FRAME_COUNT = 30;
 const GROOM_IDLE_FRAME_RATE = 15;
@@ -64,8 +61,16 @@ export class LobbySprite extends RoomSprite {
 		);
 	}
 
+	private get slotWidth(): number {
+		const queueLength = this.clientQueue.length;
+		if (queueLength <= 6) return 150;
+		if (queueLength <= 8) return 140;
+		if (queueLength <= 10) return 135;
+		return 125;
+	}
+
 	private computeLobbyWidth(): number {
-		const queueWidth = this.clientQueue.length * SLOT_WIDTH;
+		const queueWidth = this.clientQueue.length * this.slotWidth;
 		return QUEUE_START_X + queueWidth + END_PILLAR_WIDTH;
 	}
 
@@ -179,18 +184,18 @@ export class LobbySprite extends RoomSprite {
 	private buildWaitingQueue() {
 		const queueLength = this.clientQueue.length;
 		for (let index = 0; index <= queueLength; index++) {
-			const pillarX = QUEUE_START_X + (index - 0.5) * SLOT_WIDTH;
+			const pillarX = QUEUE_START_X + (index - 0.5) * this.slotWidth;
 			const waitingPillar = this.scene.add.image(
 				pillarX,
 				-PADDING,
 				TILES_ATLAS_KEY,
 				"lobbyWaitingPillar",
 			);
-			waitingPillar.setOrigin(0, 1);
+			waitingPillar.setOrigin(0.5, 1);
 			this.add(waitingPillar);
 
 			if (index < queueLength) {
-				const tileX = QUEUE_START_X + (index - 0.35) * SLOT_WIDTH;
+				const tileX = QUEUE_START_X + (index - 0.5) * this.slotWidth;
 				const waitingTile = this.scene.add.image(
 					tileX,
 					-55 - PADDING,
@@ -198,7 +203,7 @@ export class LobbySprite extends RoomSprite {
 					"lobbyWaitingTile",
 				);
 				waitingTile.setOrigin(0, 1);
-				waitingTile.displayWidth = SLOT_WIDTH;
+				waitingTile.displayWidth = this.slotWidth;
 				this.add(waitingTile);
 			}
 		}
@@ -211,8 +216,7 @@ export class LobbySprite extends RoomSprite {
 			const config = CLIENT_SPRITE_REGISTRY[client.type];
 			if (!config) continue;
 
-			const clientX =
-				QUEUE_START_X + index * SLOT_WIDTH + (WAITING_PILLAR_WIDTH * 4) / 5;
+			const clientX = QUEUE_START_X + index * this.slotWidth;
 			const sprite = this.createQueueClientSprite(config, clientX);
 			this.queueClientSprites.push(sprite);
 			this.add(sprite);
