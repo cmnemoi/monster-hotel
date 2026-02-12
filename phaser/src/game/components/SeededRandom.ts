@@ -1,9 +1,11 @@
+import type { RandomGenerator } from "#phaser/domain/RandomGenerator";
+
 /**
  * Deterministic pseudo-random number generator using the mulberry32 algorithm.
  * Produces repeatable sequences from a given seed, used for facade decoration
  * so that the same hotel layout always renders with the same random variations.
  */
-export class SeededRandom {
+export class SeededRandom implements RandomGenerator {
 	private state: number;
 
 	constructor(seed: number) {

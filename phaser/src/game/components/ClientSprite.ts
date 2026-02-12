@@ -1,10 +1,15 @@
+import { ClientMovement } from "#phaser/domain/ClientMovement";
+import { Duration } from "#phaser/domain/Duration";
 import type { ClientType } from "#phaser/models";
 import { ClientAnimation } from "./client/ClientAnimation";
-import { ClientMovement } from "./client/ClientMovement";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
 } from "./client/ClientSpriteRegistry";
+import { SeededRandom } from "./SeededRandom";
+
+const MOVEMENT_BOUNDS_MIN_RATIO = 0.3;
+const MOVEMENT_BOUNDS_MAX_RATIO = 0.7;
 
 export type ClientSpriteParams = {
 	clientType: ClientType;
@@ -12,6 +17,10 @@ export type ClientSpriteParams = {
 	roomPadding: number;
 };
 
+/**
+ * Phaser container rendering a client sprite,
+ * delegating movement logic to a pure domain ClientMovement.
+ */
 export class ClientSprite extends Phaser.GameObjects.Container {
 	private readonly animation: ClientAnimation;
 	private readonly movement: ClientMovement;
@@ -19,13 +28,18 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 	static create(scene: Phaser.Scene, params: ClientSpriteParams): ClientSprite {
 		const config = ClientSprite.getConfigFromType(params.clientType);
 		const animationNamespace = `client.${params.clientType}`;
+		const movement = new ClientMovement(
+			params.roomWidth * MOVEMENT_BOUNDS_MIN_RATIO,
+			params.roomWidth * MOVEMENT_BOUNDS_MAX_RATIO,
+			new SeededRandom(Date.now()),
+		);
 
 		return new ClientSprite(
 			scene,
 			params.roomWidth / 2,
 			-params.roomPadding,
 			new ClientAnimation(scene, config, animationNamespace),
-			new ClientMovement(scene, params),
+			movement,
 		);
 	}
 
@@ -44,10 +58,11 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 	}
 
 	override update(_time: number, delta: number): void {
-		const movementUpdate = this.movement.update(delta);
+		this.movement.update(Duration.fromMilliseconds(delta));
+		const movementState = this.movement.state();
 
-		this.x = movementUpdate.containerX;
-		this.animation.update(movementUpdate);
+		this.x = movementState.x;
+		this.animation.update(movementState);
 	}
 
 	private static getConfigFromType(clientType: ClientType): ClientSpriteConfig {

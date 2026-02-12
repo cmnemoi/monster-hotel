@@ -1,4 +1,4 @@
-import type { MovementUpdate } from "./ClientMovement";
+import type { MovementState } from "#phaser/domain/ClientMovement";
 import type { ClientSpriteConfig } from "./ClientSpriteRegistry";
 
 type ClientState = "idle" | "walk" | "sleep";
@@ -9,6 +9,7 @@ export class ClientAnimation {
 	private readonly idleAnimKey: string;
 	private readonly walkAnimKey: string;
 	private currentState: ClientState | null = null;
+	private pendingState: ClientState | null = null;
 
 	constructor(
 		scene: Phaser.Scene,
@@ -31,12 +32,31 @@ export class ClientAnimation {
 		);
 		this.sprite.setOrigin(0.5, 1);
 		this.sprite.setScale(config.scale);
+		this.sprite.on("animationrepeat", this.onAnimationCycleComplete, this);
 	}
 
-	update(update: MovementUpdate): void {
-		this.sprite.setPosition(update.spriteX, update.spriteY);
-		this.play(update.state);
-		this.sprite.setFlipX(update.flipX);
+	update(movementState: MovementState): void {
+		this.applyAnimation(movementState.animation);
+		this.sprite.setFlipX(movementState.direction === "left");
+	}
+
+	private applyAnimation(targetState: ClientState): void {
+		if (this.isWaitingForWalkCycleToEnd(targetState)) {
+			this.pendingState = targetState;
+			return;
+		}
+		this.play(targetState);
+	}
+
+	private isWaitingForWalkCycleToEnd(targetState: ClientState): boolean {
+		return targetState === "idle" && this.currentState === "walk";
+	}
+
+	private onAnimationCycleComplete(): void {
+		if (this.pendingState !== null) {
+			this.play(this.pendingState);
+			this.pendingState = null;
+		}
 	}
 
 	getPhaserSprite(): Phaser.GameObjects.Sprite {
