@@ -1,0 +1,23 @@
+phaser/src/game/components/BackgroundSprite.ts
+  e02085fab4f1dec6 1-7,12,23-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.1",
+  "base_commit_sha": "d6bdf34bbcf438cd995d6e38d4ef14a6977fa5be",
+  "prompts": {
+    "e02085fab4f1dec6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3b2598b0fffef1M6wgqPxBT33X",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 101,
+      "total_deletions": 68,
+      "accepted_lines": 25,
+      "overriden_lines": 0
+    }
+  }
+}
