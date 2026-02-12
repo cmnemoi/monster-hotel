@@ -1,5 +1,8 @@
 # Monster Hotel
 
+[![Continous Integration](https://github.com/cmnemoi/monster-hotel/actions/workflows/ci.yml/badge.svg)](https://github.com/cmnemoi/monster-hotel/actions/workflows/ci.yml)
+[![Continous Delivery](https://github.com/cmnemoi/monster-hotel/actions/workflows/cd.yml/badge.svg)](https://github.com/cmnemoi/monster-hotel/actions/workflows/cd.yml)
+
 # Installation
 
 We will use [`mise`](https://mise.jdx.dev/) to handle our dependencies.

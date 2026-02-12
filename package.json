@@ -12,7 +12,8 @@
 		"build": "yarn phaser:build",
 		"check": "biome check .",
 		"lint": "biome check --write .",
-		"format": "biome format --write ."
+		"format": "biome format --write .",
+		"test": "yarn phaser:test"
 	},
 	"imports": {
 		"#phaser/*": "./phaser/*.js"
