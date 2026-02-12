@@ -1,0 +1,59 @@
+phaser/src/game/components/SeededRandom.ts
+  268a5d4cd0ed62c5 1-54
+phaser/tests/game/computeFacadeElements.test.ts
+  268a5d4cd0ed62c5 1-207
+phaser/src/game/components/FacadeSprite.ts
+  268a5d4cd0ed62c5 3-5,8,11-12,15-17,19,30-32,37-40,42,44-47
+phaser/tests/game/SeededRandom.test.ts
+  268a5d4cd0ed62c5 1-79
+phaser/src/game/components/computeFacadeElements.ts
+  268a5d4cd0ed62c5 1-231
+phaser/src/game/components/LobbySprite.ts
+  3523fc44fa1c67a7 136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.1",
+  "base_commit_sha": "2a2484392a597819f40bb5e0be8ae4c7874102f7",
+  "prompts": {
+    "268a5d4cd0ed62c5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3aeb175a4ffeWSZGV3MbqdB1S1",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 610,
+      "total_deletions": 128,
+      "accepted_lines": 593,
+      "overriden_lines": 0
+    },
+    "2c869ef7e6d59f22": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3ae8390ffffeJfUYwvHAug4ce2",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 358,
+      "total_deletions": 1,
+      "accepted_lines": 333,
+      "overriden_lines": 0
+    },
+    "3523fc44fa1c67a7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3ae116427ffeRgI7N4P82n4epQ",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
