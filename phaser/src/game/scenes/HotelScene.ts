@@ -27,11 +27,11 @@ export class HotelScene extends Phaser.Scene {
 		this.playlist.build(["intro_music", "music_1", "music_2", "music_3"]);
 	}
 
-	async create() {
+	create() {
 		this.backgroundSprite = new BackgroundSprite(this);
 		this.playlist.play();
 
-		await this.hotelSprite.applyState(this.hotel);
+		this.hotelSprite.applyState(this.hotel);
 		this.refreshCamera();
 		this.backgroundSprite.resize();
 

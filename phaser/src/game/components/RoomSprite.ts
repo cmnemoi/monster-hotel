@@ -1,4 +1,4 @@
-import type { ClientInQueue, Room } from "#phaser/domain/Hotel";
+import type { Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import type { Position } from "#phaser/domain/Position";
 
@@ -31,25 +31,4 @@ export abstract class RoomSprite extends Phaser.GameObjects.Container {
 	public abstract override update(time: number, delta: number): void;
 
 	public abstract getWorldBounds(): Phaser.Geom.Rectangle;
-
-	/**
-	 * Factory method that creates the appropriate RoomSprite subclass based on room type.
-	 */
-	public static async create(
-		scene: Phaser.Scene,
-		room: Room,
-		hotelGrid: HotelGrid,
-		clientQueue: ClientInQueue[] = [],
-	): Promise<RoomSprite> {
-		switch (room.type) {
-			case "bedroom": {
-				const { BedroomSprite } = await import("./BedroomSprite");
-				return new BedroomSprite(scene, room, hotelGrid);
-			}
-			case "lobby": {
-				const { LobbySprite } = await import("./LobbySprite");
-				return new LobbySprite(scene, room, hotelGrid, clientQueue);
-			}
-		}
-	}
 }
