@@ -1,15 +1,12 @@
-import type { MovementState } from "#phaser/domain/ClientMovement";
-import type { ClientSpriteConfig } from "./ClientSpriteRegistry";
-
-type ClientState = "idle" | "walk" | "sleep";
+import type { ClientState } from "#phaser/domain/ClientBehavior";
+import type { ClientSpriteConfig } from "#phaser/domain/ClientSpriteRegistry";
 
 export class ClientAnimation {
 	private readonly sprite: Phaser.GameObjects.Sprite;
 	private readonly config: ClientSpriteConfig;
 	private readonly idleAnimKey: string;
 	private readonly walkAnimKey: string;
-	private currentState: ClientState | null = null;
-	private pendingState: ClientState | null = null;
+	private onCycleCompleteCallback: (() => void) | null = null;
 
 	constructor(
 		scene: Phaser.Scene,
@@ -32,35 +29,26 @@ export class ClientAnimation {
 		);
 		this.sprite.setOrigin(0.5, 1);
 		this.sprite.setScale(config.scale);
-		this.sprite.on("animationrepeat", this.onAnimationCycleComplete, this);
+		this.sprite.on("animationrepeat", this.handleAnimationRepeat, this);
 	}
 
-	update(movementState: MovementState): void {
-		this.applyAnimation(movementState.animation);
-		this.sprite.setFlipX(movementState.direction === "left");
+	onCycleComplete(callback: () => void): void {
+		this.onCycleCompleteCallback = callback;
 	}
 
-	private applyAnimation(targetState: ClientState): void {
-		if (this.isWaitingForWalkCycleToEnd(targetState)) {
-			this.pendingState = targetState;
-			return;
+	update(clientState: ClientState): void {
+		if (clientState.hasAnimationPhaseChanged) {
+			this.play(clientState.animationPhase);
 		}
-		this.play(targetState);
-	}
-
-	private isWaitingForWalkCycleToEnd(targetState: ClientState): boolean {
-		return targetState === "idle" && this.currentState === "walk";
-	}
-
-	private onAnimationCycleComplete(): void {
-		if (this.pendingState !== null) {
-			this.play(this.pendingState);
-			this.pendingState = null;
-		}
+		this.sprite.setFlipX(clientState.isFacingLeft);
 	}
 
 	getPhaserSprite(): Phaser.GameObjects.Sprite {
 		return this.sprite;
+	}
+
+	private handleAnimationRepeat(): void {
+		this.onCycleCompleteCallback?.();
 	}
 
 	private createAnimations(scene: Phaser.Scene) {
@@ -102,11 +90,8 @@ export class ClientAnimation {
 			.find((name) => name.startsWith(this.config.idlePrefix));
 	}
 
-	private play(state: ClientState): void {
-		if (this.currentState === state) return;
-		this.currentState = state;
-
-		const animKey = state === "walk" ? this.walkAnimKey : this.idleAnimKey;
+	private play(phase: "idle" | "walk"): void {
+		const animKey = phase === "walk" ? this.walkAnimKey : this.idleAnimKey;
 		this.sprite.play(animKey, true);
 	}
 }

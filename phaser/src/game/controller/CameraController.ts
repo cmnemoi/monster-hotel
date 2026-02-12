@@ -1,3 +1,5 @@
+import { CameraView } from "#phaser/domain/CameraView";
+import { Rectangle } from "#phaser/domain/Rectangle";
 import { WORLD_PADDING_IN_PIXELS } from "../constants";
 
 export class CameraController {
@@ -7,26 +9,21 @@ export class CameraController {
 		this.camera = scene.cameras.main;
 	}
 
-	public fitAndCenter(worldRect: Phaser.Geom.Rectangle) {
-		const paddedRect = this.addPadding(worldRect, WORLD_PADDING_IN_PIXELS);
+	public fitAndCenter(worldRectangle: Phaser.Geom.Rectangle) {
+		const worldBounds = Rectangle.create(
+			{ x: worldRectangle.x, y: worldRectangle.y },
+			worldRectangle.width,
+			worldRectangle.height,
+		);
 
-		const zoomX = this.camera.width / paddedRect.width;
-		const zoomY = this.camera.height / paddedRect.height;
-		const zoom = Math.min(zoomX, zoomY);
+		const view = CameraView.fitToWorldBounds(
+			this.camera.width,
+			this.camera.height,
+			worldBounds,
+			WORLD_PADDING_IN_PIXELS,
+		);
 
-		this.camera.setZoom(zoom);
-		this.camera.centerOn(paddedRect.centerX, paddedRect.centerY);
-	}
-
-	private addPadding(
-		rect: Phaser.Geom.Rectangle,
-		padding: number,
-	): Phaser.Geom.Rectangle {
-		const padded = Phaser.Geom.Rectangle.Clone(rect);
-		padded.x -= padding;
-		padded.y -= padding;
-		padded.width += padding * 2;
-		padded.height += padding * 2;
-		return padded;
+		this.camera.setZoom(view.zoom);
+		this.camera.centerOn(view.center.x, view.center.y);
 	}
 }

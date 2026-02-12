@@ -5,25 +5,22 @@ const IDLE_MIN_MILLISECONDS = 2_000;
 const IDLE_MAX_MILLISECONDS = 5_000;
 const WALK_SPEED_PER_MILLISECOND = 0.125;
 
-/**
- * Snapshot of a client's movement for rendering.
- */
-export type MovementState = {
-	x: number;
-	animation: "idle" | "walk";
-	direction: "left" | "right";
+export type ClientState = {
+	readonly x: number;
+	readonly animationPhase: "idle" | "walk";
+	readonly isFacingLeft: boolean;
+	readonly hasAnimationPhaseChanged: boolean;
 };
 
-/**
- * Pure domain object modeling a character walking back and forth
- * within horizontal bounds, alternating between idle and walk phases.
- */
-export class ClientMovement {
+export class ClientBehavior {
 	private x: number;
-	private animation: "idle" | "walk" = "idle";
+	private movementPhase: "idle" | "walk" = "idle";
+	private animationPhase: "idle" | "walk" = "idle";
 	private direction: "left" | "right" = "right";
 	private idleTimeRemaining: Duration;
 	private shouldReverseOnWalk = false;
+	private pendingIdle = false;
+	private animationPhaseChanged = false;
 
 	constructor(
 		private readonly minX: number,
@@ -34,25 +31,29 @@ export class ClientMovement {
 		this.idleTimeRemaining = this.randomIdleDuration();
 	}
 
-	/**
-	 * Advance the movement state by the given elapsed time.
-	 */
 	update(elapsed: Duration): void {
-		if (this.animation === "idle") {
+		if (this.movementPhase === "idle") {
 			this.updateIdle(elapsed);
 		} else {
 			this.updateWalk(elapsed);
 		}
 	}
 
-	/**
-	 * Return the current movement state for rendering.
-	 */
-	state(): MovementState {
+	notifyAnimationCycleComplete(): void {
+		if (this.pendingIdle) {
+			this.pendingIdle = false;
+			this.setAnimationPhase("idle");
+		}
+	}
+
+	state(): ClientState {
+		const changed = this.animationPhaseChanged;
+		this.animationPhaseChanged = false;
 		return {
 			x: this.x,
-			animation: this.animation,
-			direction: this.direction,
+			animationPhase: this.animationPhase,
+			isFacingLeft: this.direction === "left",
+			hasAnimationPhaseChanged: changed,
 		};
 	}
 
@@ -62,7 +63,8 @@ export class ClientMovement {
 			return;
 		}
 
-		this.animation = "walk";
+		this.movementPhase = "walk";
+		this.setAnimationPhase("walk");
 		if (this.shouldReverseOnWalk) {
 			this.reverseDirection();
 			this.shouldReverseOnWalk = false;
@@ -87,9 +89,17 @@ export class ClientMovement {
 	}
 
 	private startIdle(): void {
-		this.animation = "idle";
+		this.movementPhase = "idle";
+		this.pendingIdle = true;
 		this.shouldReverseOnWalk = true;
 		this.idleTimeRemaining = this.randomIdleDuration();
+	}
+
+	private setAnimationPhase(phase: "idle" | "walk"): void {
+		if (this.animationPhase !== phase) {
+			this.animationPhase = phase;
+			this.animationPhaseChanged = true;
+		}
 	}
 
 	private reverseDirection(): void {

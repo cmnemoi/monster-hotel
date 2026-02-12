@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SeededRandom } from "#phaser/game/components/SeededRandom";
+import { SeededRandom } from "#phaser/domain/SeededRandom";
 
 describe("SeededRandom", () => {
 	it("should produce deterministic values for the same seed", () => {

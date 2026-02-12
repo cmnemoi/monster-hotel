@@ -1,3 +1,5 @@
+import { BackgroundTransform } from "#phaser/domain/BackgroundTransform";
+
 /**
  * Height in pixels of the visible city portion of the background image.
  * The rest of the image (below this height) is black and should not be visible.
@@ -18,17 +20,18 @@ export class BackgroundSprite extends Phaser.GameObjects.Image {
 	resize() {
 		const camera = this.scene.cameras.main;
 		const { width, height } = this.scene.scale;
-
 		const sourceImage = this.texture.getSourceImage();
-		const viewportWidth = width / camera.zoom;
-		const viewportHeight = height / camera.zoom;
-		const scale = Math.max(
-			viewportWidth / sourceImage.width,
-			viewportHeight / CITY_HEIGHT_IN_PIXELS,
-		);
-		this.setScale(scale);
 
-		this.x = (width - sourceImage.width * scale) / 2;
-		this.y = (height - CITY_HEIGHT_IN_PIXELS * scale) / 2;
+		const transform = BackgroundTransform.fitToViewport(
+			width,
+			height,
+			sourceImage.width,
+			CITY_HEIGHT_IN_PIXELS,
+			camera.zoom,
+		);
+
+		this.setScale(transform.scale);
+		this.x = transform.position.x;
+		this.y = transform.position.y;
 	}
 }

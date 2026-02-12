@@ -1,4 +1,6 @@
-import type { Room } from "#phaser/models";
+import { BedroomLayout } from "#phaser/domain/BedroomLayout";
+import type { Room } from "#phaser/domain/Hotel";
+import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { ClientSprite } from "./ClientSprite";
 import { RoomSprite } from "./RoomSprite";
@@ -7,9 +9,6 @@ const PADDING = 10;
 const ROOM_ATLAS_KEY = "rooms0";
 const TILES_ATLAS_KEY = "tilesheet0";
 
-/**
- * Visual representation of a bedroom (standard hotel room).
- */
 export class BedroomSprite extends RoomSprite {
 	private base!: Phaser.GameObjects.Image;
 	private vignette!: Phaser.GameObjects.Image;
@@ -18,17 +17,20 @@ export class BedroomSprite extends RoomSprite {
 	private wallRight!: Phaser.GameObjects.Image;
 	private bottomPad!: Phaser.GameObjects.Image;
 
-	private roomWidthInPixels: number = ROOM_WIDTH;
-	private roomHeightInPixels: number = ROOM_HEIGHT;
+	private layout = BedroomLayout.fromRoom(
+		{ id: "", type: "bedroom", position: { x: 0, y: 0 }, client: null },
+		1,
+		ROOM_WIDTH,
+		ROOM_HEIGHT,
+	);
 
-	private clientView?: ClientSprite | undefined;
+	private clientSprite?: ClientSprite | undefined;
 
-	constructor(scene: Phaser.Scene, room: Room) {
-		super(scene, room);
+	constructor(scene: Phaser.Scene, room: Room, hotelGrid: HotelGrid) {
+		super(scene, room, hotelGrid);
 		this.buildVisuals();
 		this.setGridPosition(room.position);
-		this.setRoomSize(1);
-		this.updateState(room);
+		this.updateLayout(room, 1);
 		scene.add.existing(this);
 	}
 
@@ -78,67 +80,73 @@ export class BedroomSprite extends RoomSprite {
 		this.add(this.bottomPad);
 	}
 
-	private setRoomSize(roomSize: number) {
-		this.roomWidthInPixels = ROOM_WIDTH * roomSize;
-		this.roomHeightInPixels = ROOM_HEIGHT;
+	private updateLayout(room: Room, roomSize: number) {
+		this.layout = BedroomLayout.fromRoom(
+			room,
+			roomSize,
+			ROOM_WIDTH,
+			ROOM_HEIGHT,
+		);
 		this.applyLayout();
+		this.updateClient(room);
 	}
 
 	private applyLayout() {
-		this.base.displayWidth = this.roomWidthInPixels;
-		this.base.displayHeight = this.roomHeightInPixels;
+		this.base.displayWidth = this.layout.roomWidth;
+		this.base.displayHeight = this.layout.roomHeight;
 		this.base.setPosition(0, 0);
 
-		this.vignette.setPosition(0, -this.roomHeightInPixels);
-		this.vignette.displayWidth = this.roomWidthInPixels;
-		this.vignette.displayHeight = this.roomHeightInPixels;
+		this.vignette.setPosition(0, -this.layout.roomHeight);
+		this.vignette.displayWidth = this.layout.roomWidth;
+		this.vignette.displayHeight = this.layout.roomHeight;
 
-		this.wallTop.setPosition(0, -this.roomHeightInPixels);
-		this.wallTop.displayWidth = this.roomWidthInPixels;
+		this.wallTop.setPosition(0, -this.layout.roomHeight);
+		this.wallTop.displayWidth = this.layout.roomWidth;
 
-		this.wallLeft.setPosition(0, -this.roomHeightInPixels);
-		this.wallLeft.displayHeight = this.roomHeightInPixels;
+		this.wallLeft.setPosition(0, -this.layout.roomHeight);
+		this.wallLeft.displayHeight = this.layout.roomHeight;
 
-		this.wallRight.setPosition(
-			this.roomWidthInPixels,
-			-this.roomHeightInPixels,
-		);
-		this.wallRight.displayHeight = this.roomHeightInPixels;
+		this.wallRight.setPosition(this.layout.roomWidth, -this.layout.roomHeight);
+		this.wallRight.displayHeight = this.layout.roomHeight;
 
 		this.bottomPad.setPosition(0, 0);
-		this.bottomPad.displayWidth = this.roomWidthInPixels;
+		this.bottomPad.displayWidth = this.layout.roomWidth;
 		this.bottomPad.displayHeight = PADDING;
 	}
 
 	public updateState(room: Room) {
-		if (room.client && !this.clientView) {
-			this.clientView = ClientSprite.create(this.scene, {
-				clientType: room.client.type,
-				roomWidth: ROOM_WIDTH,
-				roomPadding: PADDING,
-			});
-
-			if (this.clientView) {
-				this.add(this.clientView);
-			}
-		}
-
-		if (!room.client && this.clientView) {
-			this.clientView.destroy();
-			this.clientView = undefined;
-		}
+		this.updateLayout(room, 1);
 	}
 
 	public override update(time: number, delta: number) {
-		this.clientView?.update(time, delta);
+		this.clientSprite?.update(time, delta);
 	}
 
 	public getWorldBounds(): Phaser.Geom.Rectangle {
 		return new Phaser.Geom.Rectangle(
 			this.x,
-			this.y - this.roomHeightInPixels,
-			this.roomWidthInPixels,
-			this.roomHeightInPixels,
+			this.y - this.layout.roomHeight,
+			this.layout.roomWidth,
+			this.layout.roomHeight,
 		);
+	}
+
+	private updateClient(room: Room) {
+		if (this.layout.containsClient && !this.clientSprite) {
+			this.clientSprite = ClientSprite.create(this.scene, {
+				clientType: room.client?.type,
+				roomWidth: ROOM_WIDTH,
+				roomPadding: PADDING,
+			});
+
+			if (this.clientSprite) {
+				this.add(this.clientSprite);
+			}
+		}
+
+		if (!this.layout.containsClient && this.clientSprite) {
+			this.clientSprite.destroy();
+			this.clientSprite = undefined;
+		}
 	}
 }

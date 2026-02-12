@@ -1,8 +1,4 @@
-import { computeFacadeCells } from "./computeFacadeCells";
-import {
-	computeFacadeElements,
-	type FacadeElement,
-} from "./computeFacadeElements";
+import { type FacadeElement, HotelFacade } from "#phaser/domain/HotelFacade";
 
 const BG_ATLAS_KEY = "bgAssets.hd";
 const DEFAULT_HOTEL_SEED = 42;
@@ -11,7 +7,7 @@ const DEFAULT_HOTEL_SEED = 42;
  * Renders facade elements (walls with windows, roofs, balconies, chimneys) on
  * empty cells adjacent to hotel rooms.
  */
-export class FacadeSprite extends Phaser.GameObjects.Container {
+export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	private hotelSeed: number;
 
 	constructor(scene: Phaser.Scene, hotelSeed = DEFAULT_HOTEL_SEED) {
@@ -24,13 +20,10 @@ export class FacadeSprite extends Phaser.GameObjects.Container {
 	 */
 	public rebuild(occupiedCells: Set<string>): void {
 		this.removeAll(true);
-		const facadeCells = computeFacadeCells(occupiedCells);
+		const facade = HotelFacade.fromOccupiedCells(occupiedCells, this.hotelSeed);
 
-		for (const cell of facadeCells) {
-			const elements = computeFacadeElements(cell, this.hotelSeed);
-			for (const element of elements) {
-				this.renderElement(element);
-			}
+		for (const element of facade.elements) {
+			this.renderElement(element);
 		}
 	}
 

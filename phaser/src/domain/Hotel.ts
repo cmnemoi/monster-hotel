@@ -25,7 +25,7 @@ export type ClientEffect = "heat" | "cold" | "odor" | "noise" | "sunlight";
 export type RoomType = "bedroom" | "lobby";
 
 export type Hotel = {
-	gold: integer;
+	gold: number;
 	rooms: Record<string, Room>;
 	clientQueue: ClientInQueue[];
 };
@@ -33,14 +33,15 @@ export type Hotel = {
 export type Room = {
 	id: string;
 	type: RoomType;
-	position: { x: integer; y: integer };
+	position: { x: number; y: number };
 	client: Client | null;
 };
 
 export type Client = {
+	id: string;
 	name: string;
 	type: ClientType;
-	satisfaction: integer;
+	satisfaction: number;
 	likes: ClientEffect[];
 	produces: ClientEffect[];
 };

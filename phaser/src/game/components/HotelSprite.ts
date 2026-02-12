@@ -1,41 +1,36 @@
-import type { Hotel } from "#phaser/models";
+import type { Hotel } from "#phaser/domain/Hotel";
+import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
-import type { Position } from "../types";
-import { createRoomSprite } from "./createRoomSprite";
-import { FacadeSprite } from "./FacadeSprite";
-import type { RoomSprite } from "./RoomSprite";
+import { HotelFacadeSprite } from "./HotelFacadeSprite";
+import { RoomSprite } from "./RoomSprite";
 
 export class HotelSprite extends Phaser.GameObjects.Container {
 	private roomsById = new Map<string, RoomSprite>();
 	private roomsByPosition = new Map<string, string>();
-	private facadeSprite: FacadeSprite;
+	private hotelFacadeSprite: HotelFacadeSprite;
+	private readonly hotelGrid: HotelGrid;
 
-	constructor(scene: Phaser.Scene) {
+	constructor(scene: Phaser.Scene, hotelGrid: HotelGrid) {
 		super(scene, 0, 0);
-		this.facadeSprite = new FacadeSprite(scene);
-		this.add(this.facadeSprite);
+		this.hotelGrid = hotelGrid;
+		this.hotelFacadeSprite = new HotelFacadeSprite(scene);
+		this.add(this.hotelFacadeSprite);
 		scene.add.existing(this);
 	}
 
-	static positionKey(x: number, y: number) {
-		return `${x},${y}`;
-	}
-
-	static gridToWorld(gridX: number, gridY: number): Position {
-		return {
-			x: gridX * ROOM_WIDTH,
-			y: -gridY * ROOM_HEIGHT,
-		};
-	}
-
-	public applyState(state: Hotel) {
+	public async applyState(state: Hotel) {
 		this.roomsByPosition.clear();
 
 		for (const room of Object.values(state.rooms)) {
 			let roomSprite = this.roomsById.get(room.id);
 
 			if (!roomSprite) {
-				roomSprite = createRoomSprite(this.scene, room, state.clientQueue);
+				roomSprite = await RoomSprite.create(
+					this.scene,
+					room,
+					this.hotelGrid,
+					state.clientQueue,
+				);
 				this.roomsById.set(room.id, roomSprite);
 				this.add(roomSprite);
 			} else {
@@ -44,7 +39,7 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 			}
 
 			this.roomsByPosition.set(
-				HotelSprite.positionKey(room.position.x, room.position.y),
+				this.hotelGrid.toPositionKey(room.position),
 				room.id,
 			);
 		}
@@ -62,12 +57,14 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 
 	private rebuildFacade(): void {
 		const occupiedCells = new Set(this.roomsByPosition.keys());
-		this.facadeSprite.rebuild(occupiedCells);
-		this.facadeSprite.setDepth(-1);
+		this.hotelFacadeSprite.rebuild(occupiedCells);
+		this.hotelFacadeSprite.setDepth(-1);
 	}
 
 	public getRoomAt(gridX: number, gridY: number): RoomSprite | undefined {
-		const id = this.roomsByPosition.get(HotelSprite.positionKey(gridX, gridY));
+		const id = this.roomsByPosition.get(
+			this.hotelGrid.toPositionKey({ x: gridX, y: gridY }),
+		);
 		if (!id) return undefined;
 		return this.roomsById.get(id);
 	}
@@ -81,10 +78,10 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 	public computeWorldBounds(): Phaser.Geom.Rectangle {
 		let rectangle: Phaser.Geom.Rectangle | null = null;
 
-		for (const view of this.roomsById.values()) {
-			const bounds = view.getWorldBounds();
-			if (!rectangle) rectangle = Phaser.Geom.Rectangle.Clone(bounds);
-			else Phaser.Geom.Rectangle.Union(rectangle, bounds, rectangle);
+		for (const roomSprite of this.roomsById.values()) {
+			const worldBounds = roomSprite.getWorldBounds();
+			if (!rectangle) rectangle = Phaser.Geom.Rectangle.Clone(worldBounds);
+			else Phaser.Geom.Rectangle.Union(rectangle, worldBounds, rectangle);
 		}
 
 		if (!rectangle)

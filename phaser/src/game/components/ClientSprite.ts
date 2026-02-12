@@ -1,12 +1,12 @@
-import { ClientMovement } from "#phaser/domain/ClientMovement";
-import { Duration } from "#phaser/domain/Duration";
-import type { ClientType } from "#phaser/models";
-import { ClientAnimation } from "./client/ClientAnimation";
+import { ClientBehavior } from "#phaser/domain/ClientBehavior";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
-} from "./client/ClientSpriteRegistry";
-import { SeededRandom } from "./SeededRandom";
+} from "#phaser/domain/ClientSpriteRegistry";
+import { Duration } from "#phaser/domain/Duration";
+import type { ClientType } from "#phaser/domain/Hotel";
+import { SeededRandom } from "#phaser/domain/SeededRandom";
+import { ClientAnimation } from "./client/ClientAnimation";
 
 const MOVEMENT_BOUNDS_MIN_RATIO = 0.3;
 const MOVEMENT_BOUNDS_MAX_RATIO = 0.7;
@@ -17,18 +17,14 @@ export type ClientSpriteParams = {
 	roomPadding: number;
 };
 
-/**
- * Phaser container rendering a client sprite,
- * delegating movement logic to a pure domain ClientMovement.
- */
 export class ClientSprite extends Phaser.GameObjects.Container {
 	private readonly animation: ClientAnimation;
-	private readonly movement: ClientMovement;
+	private readonly behavior: ClientBehavior;
 
 	static create(scene: Phaser.Scene, params: ClientSpriteParams): ClientSprite {
 		const config = ClientSprite.getConfigFromType(params.clientType);
 		const animationNamespace = `client.${params.clientType}`;
-		const movement = new ClientMovement(
+		const behavior = new ClientBehavior(
 			params.roomWidth * MOVEMENT_BOUNDS_MIN_RATIO,
 			params.roomWidth * MOVEMENT_BOUNDS_MAX_RATIO,
 			new SeededRandom(Date.now()),
@@ -39,7 +35,7 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 			params.roomWidth / 2,
 			-params.roomPadding,
 			new ClientAnimation(scene, config, animationNamespace),
-			movement,
+			behavior,
 		);
 	}
 
@@ -48,21 +44,24 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 		x: number,
 		y: number,
 		animation: ClientAnimation,
-		movement: ClientMovement,
+		behavior: ClientBehavior,
 	) {
 		super(scene, x, y);
 		this.animation = animation;
-		this.movement = movement;
+		this.behavior = behavior;
+		this.animation.onCycleComplete(() => {
+			this.behavior.notifyAnimationCycleComplete();
+		});
 		this.add(animation.getPhaserSprite());
 		scene.add.existing(this);
 	}
 
 	override update(_time: number, delta: number): void {
-		this.movement.update(Duration.fromMilliseconds(delta));
-		const movementState = this.movement.state();
+		this.behavior.update(Duration.fromMilliseconds(delta));
+		const state = this.behavior.state();
 
-		this.x = movementState.x;
-		this.animation.update(movementState);
+		this.x = state.x;
+		this.animation.update(state);
 	}
 
 	private static getConfigFromType(clientType: ClientType): ClientSpriteConfig {

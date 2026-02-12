@@ -1,4 +1,4 @@
-import type { Hotel } from "#phaser/models";
+import type { Hotel } from "#phaser/domain/Hotel";
 
 export default async function getHotel(_userId: string): Promise<Hotel> {
 	return {
@@ -15,6 +15,7 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 				type: "bedroom",
 				position: { x: 0, y: 0 },
 				client: {
+					id: "client1",
 					name: "client1",
 					type: "poring",
 					satisfaction: 15,
@@ -27,6 +28,7 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 				type: "bedroom",
 				position: { x: 0, y: 1 },
 				client: {
+					id: "client2",
 					name: "client2",
 					type: "bomber",
 					satisfaction: 15,
@@ -49,12 +51,14 @@ export default async function getHotel(_userId: string): Promise<Hotel> {
 		},
 		clientQueue: [
 			{
+				id: "client3",
 				name: "client3",
 				type: "nice neighbour",
 				likes: ["noise"],
 				produces: ["cold"],
 			},
 			{
+				id: "client4",
 				name: "client4",
 				type: "poring",
 				likes: ["odor"],

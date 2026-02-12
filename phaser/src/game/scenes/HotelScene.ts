@@ -1,8 +1,10 @@
+import type { Hotel } from "#phaser/domain/Hotel";
+import { HotelGrid } from "#phaser/domain/HotelGrid";
 import { Playlist } from "#phaser/domain/Playlist";
 import { PhaserMusicRepository } from "#phaser/game/repositories/PhaserMusicRepository";
-import type { Hotel } from "#phaser/models";
 import { BackgroundSprite } from "../components/BackgroundSprite";
 import { HotelSprite } from "../components/HotelSprite";
+import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { CameraController } from "../controller/CameraController";
 
 export class HotelScene extends Phaser.Scene {
@@ -19,16 +21,17 @@ export class HotelScene extends Phaser.Scene {
 	init() {
 		this.hotel = this.game.registry.get("hotel");
 		this.playlist = new Playlist(new PhaserMusicRepository(this));
-		this.hotelSprite = new HotelSprite(this);
+		const hotelGrid = new HotelGrid(ROOM_WIDTH, ROOM_HEIGHT);
+		this.hotelSprite = new HotelSprite(this, hotelGrid);
 		this.cameraController = new CameraController(this);
 		this.playlist.build(["intro_music", "music_1", "music_2", "music_3"]);
 	}
 
-	create() {
+	async create() {
 		this.backgroundSprite = new BackgroundSprite(this);
 		this.playlist.play();
 
-		this.hotelSprite.applyState(this.hotel);
+		await this.hotelSprite.applyState(this.hotel);
 		this.refreshCamera();
 		this.backgroundSprite.resize();
 

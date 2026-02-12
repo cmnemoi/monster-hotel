@@ -1,9 +1,12 @@
-import type { ClientInQueue, Room } from "#phaser/models";
-import { ROOM_HEIGHT } from "../constants";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
-} from "./client/ClientSpriteRegistry";
+} from "#phaser/domain/ClientSpriteRegistry";
+import type { ClientInQueue, Room } from "#phaser/domain/Hotel";
+import type { HotelGrid } from "#phaser/domain/HotelGrid";
+import { LobbyLayout } from "#phaser/domain/LobbyLayout";
+import type { Position } from "#phaser/domain/Position";
+import { ROOM_HEIGHT } from "../constants";
 import { RoomSprite } from "./RoomSprite";
 
 const ROOM_ATLAS_KEY = "rooms0";
@@ -13,29 +16,24 @@ const GROOM_ATLAS_KEY = "monsters2.hd";
 const PADDING = 10;
 const LOBBY_BACKGROUND_WIDTH = 512;
 
-const QUEUE_START_X = 400;
-const END_PILLAR_WIDTH = 300;
-
 const GROOM_IDLE_FRAME_COUNT = 30;
 const GROOM_IDLE_FRAME_RATE = 15;
 const GROOM_CHAIR_OFFSET_Y = 55;
 
-/**
- * Visual representation of the hotel lobby with reception desk, groom, and client queue.
- */
 export class LobbySprite extends RoomSprite {
-	private lobbyWidthInPixels: number;
+	private readonly layout: LobbyLayout;
 	private readonly clientQueue: ClientInQueue[];
 	private readonly queueClientSprites: Phaser.GameObjects.Sprite[] = [];
 
 	constructor(
 		scene: Phaser.Scene,
 		room: Room,
+		hotelGrid: HotelGrid,
 		clientQueue: ClientInQueue[] = [],
 	) {
-		super(scene, room);
+		super(scene, room, hotelGrid);
 		this.clientQueue = clientQueue;
-		this.lobbyWidthInPixels = this.computeLobbyWidth();
+		this.layout = LobbyLayout.fromQueue(clientQueue.length);
 
 		this.buildBackground();
 		this.buildGroomCat();
@@ -56,22 +54,9 @@ export class LobbySprite extends RoomSprite {
 		return new Phaser.Geom.Rectangle(
 			this.x,
 			this.y - ROOM_HEIGHT,
-			this.lobbyWidthInPixels,
+			this.layout.totalWidth,
 			ROOM_HEIGHT,
 		);
-	}
-
-	private get slotWidth(): number {
-		const queueLength = this.clientQueue.length;
-		if (queueLength <= 6) return 150;
-		if (queueLength <= 8) return 140;
-		if (queueLength <= 10) return 135;
-		return 125;
-	}
-
-	private computeLobbyWidth(): number {
-		const queueWidth = this.clientQueue.length * this.slotWidth;
-		return QUEUE_START_X + queueWidth + END_PILLAR_WIDTH;
 	}
 
 	private buildBackground() {
@@ -79,9 +64,7 @@ export class LobbySprite extends RoomSprite {
 		background.setOrigin(0, 1);
 		this.add(background);
 
-		const tiledWallWidth =
-			this.lobbyWidthInPixels - LOBBY_BACKGROUND_WIDTH - END_PILLAR_WIDTH;
-		if (tiledWallWidth > 0) {
+		if (this.layout.tiledWallWidth > 0) {
 			const tiledWall = this.scene.add.image(
 				LOBBY_BACKGROUND_WIDTH,
 				0,
@@ -89,13 +72,13 @@ export class LobbySprite extends RoomSprite {
 				"lobbyWallTile",
 			);
 			tiledWall.setOrigin(0, 1);
-			tiledWall.displayWidth = tiledWallWidth;
+			tiledWall.displayWidth = this.layout.tiledWallWidth;
 			tiledWall.displayHeight = ROOM_HEIGHT;
 			this.add(tiledWall);
 		}
 
 		const endPillar = this.scene.add.image(
-			this.lobbyWidthInPixels,
+			this.layout.totalWidth,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
 			"lobbyEndPillar",
@@ -105,7 +88,7 @@ export class LobbySprite extends RoomSprite {
 
 		const bottomPad = this.scene.add.image(0, 0, TILES_ATLAS_KEY, "squareBlue");
 		bottomPad.setOrigin(0, 1);
-		bottomPad.displayWidth = this.lobbyWidthInPixels;
+		bottomPad.displayWidth = this.layout.totalWidth;
 		bottomPad.displayHeight = PADDING;
 		this.add(bottomPad);
 	}
@@ -149,13 +132,9 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildDecorations() {
-		const pillarPositions = [500, 900];
-		for (const positionX of pillarPositions) {
-			if (positionX >= this.lobbyWidthInPixels - END_PILLAR_WIDTH) {
-				continue;
-			}
+		for (const position of this.layout.visiblePillars) {
 			const pillar = this.scene.add.image(
-				positionX,
+				position.x,
 				-PADDING,
 				TILES_ATLAS_KEY,
 				"lobbyPillar",
@@ -164,13 +143,9 @@ export class LobbySprite extends RoomSprite {
 			this.add(pillar);
 		}
 
-		const windowPositions = [700, 1100];
-		for (const positionX of windowPositions) {
-			if (positionX >= this.lobbyWidthInPixels - END_PILLAR_WIDTH) {
-				continue;
-			}
+		for (const position of this.layout.visibleWindows) {
 			const lobbyWindow = this.scene.add.image(
-				positionX,
+				position.x,
 				-ROOM_HEIGHT + 15,
 				TILES_ATLAS_KEY,
 				"lobbyWindow",
@@ -182,11 +157,9 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildWaitingQueue() {
-		const queueLength = this.clientQueue.length;
-		for (let index = 0; index <= queueLength; index++) {
-			const pillarX = QUEUE_START_X + (index - 0.5) * this.slotWidth;
+		for (const slot of this.layout.queueSlots) {
 			const waitingPillar = this.scene.add.image(
-				pillarX,
+				slot.pillarPosition.x,
 				-PADDING,
 				TILES_ATLAS_KEY,
 				"lobbyWaitingPillar",
@@ -194,16 +167,15 @@ export class LobbySprite extends RoomSprite {
 			waitingPillar.setOrigin(0.5, 1);
 			this.add(waitingPillar);
 
-			if (index < queueLength) {
-				const tileX = QUEUE_START_X + (index - 0.5) * this.slotWidth;
+			if (slot.hasTile) {
 				const waitingTile = this.scene.add.image(
-					tileX,
+					slot.tilePosition.x,
 					-55 - PADDING,
 					TILES_ATLAS_KEY,
 					"lobbyWaitingTile",
 				);
 				waitingTile.setOrigin(0, 1);
-				waitingTile.displayWidth = this.slotWidth;
+				waitingTile.displayWidth = this.layout.slotWidth;
 				this.add(waitingTile);
 			}
 		}
@@ -216,8 +188,9 @@ export class LobbySprite extends RoomSprite {
 			const config = CLIENT_SPRITE_REGISTRY[client.type];
 			if (!config) continue;
 
-			const clientX = QUEUE_START_X + index * this.slotWidth;
-			const sprite = this.createQueueClientSprite(config, clientX);
+			const slot = this.layout.queueSlots[index];
+			if (!slot) continue;
+			const sprite = this.createQueueClientSprite(config, slot.clientPosition);
 			this.queueClientSprites.push(sprite);
 			this.add(sprite);
 		}
@@ -225,9 +198,9 @@ export class LobbySprite extends RoomSprite {
 
 	private createQueueClientSprite(
 		config: ClientSpriteConfig,
-		positionX: number,
+		position: Position,
 	): Phaser.GameObjects.Sprite {
-		const animKey = `lobby.queue.${positionX}.idle`;
+		const animKey = `lobby.queue.${position.x}.idle`;
 		if (!this.scene.anims.exists(animKey)) {
 			this.scene.anims.create({
 				key: animKey,
@@ -244,7 +217,7 @@ export class LobbySprite extends RoomSprite {
 
 		const firstFrame = `${config.idlePrefix}0000`;
 		const sprite = this.scene.add.sprite(
-			positionX,
+			position.x,
 			-PADDING,
 			config.atlasKey,
 			firstFrame,
