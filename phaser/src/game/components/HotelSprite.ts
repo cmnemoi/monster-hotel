@@ -2,14 +2,18 @@ import type { Hotel } from "#phaser/models";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import type { Position } from "../types";
 import { createRoomSprite } from "./createRoomSprite";
+import { FacadeSprite } from "./FacadeSprite";
 import type { RoomSprite } from "./RoomSprite";
 
 export class HotelSprite extends Phaser.GameObjects.Container {
 	private roomsById = new Map<string, RoomSprite>();
 	private roomsByPosition = new Map<string, string>();
+	private facadeSprite: FacadeSprite;
 
 	constructor(scene: Phaser.Scene) {
 		super(scene, 0, 0);
+		this.facadeSprite = new FacadeSprite(scene);
+		this.add(this.facadeSprite);
 		scene.add.existing(this);
 	}
 
@@ -52,6 +56,14 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 				this.roomsById.delete(id);
 			}
 		}
+
+		this.rebuildFacade();
+	}
+
+	private rebuildFacade(): void {
+		const occupiedCells = new Set(this.roomsByPosition.keys());
+		this.facadeSprite.rebuild(occupiedCells);
+		this.facadeSprite.setDepth(-1);
 	}
 
 	public getRoomAt(gridX: number, gridY: number): RoomSprite | undefined {
