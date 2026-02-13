@@ -1,0 +1,130 @@
+phaser/tests/domain/Collection.test.ts
+  6dd2b7aa9bb2cec7 158-160
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.2",
+  "base_commit_sha": "797e9f6e6a927379ddf49da3dfbfece1a3634694",
+  "prompts": {
+    "0eb15cc403afeef2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a99d79dcffeb5IwfgrQ8FMrGL",
+        "model": "opencode/kimi-k2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 157,
+      "total_deletions": 63,
+      "accepted_lines": 12,
+      "overriden_lines": 0
+    },
+    "42b83fca1a073764": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3ad895205ffeLAqKP9iLsFCK3s",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 969,
+      "total_deletions": 366,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    },
+    "6dd2b7aa9bb2cec7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a8964f12ffelNV0wRxtp9Ok37",
+        "model": "opencode/kimi-k2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [
+        {
+          "type": "user",
+          "text": "<path>/Users/cmnemoi/code/monster-hotel/phaser/tests/domain/Collection.test.ts</path>\n<type>file</type>\n<content>1: import { describe, expect, it } from \"vitest\";\n2: import { Collection } from \"#phaser/domain/Collection\";\n3: \n4: describe(\"Collection\", () => {\n5: \tdescribe(\"firstOrThrow\", () => {\n6: \t\tit(\"should return the first element\", () => {\n7: \t\t\tconst collection = Collection.fromArray([10, 20, 30]);\n8: \n9: \t\t\texpect(collection.firstOrThrow()).toBe(10);\n10: \t\t});\n11: \n12: \t\tit(\"should throw when collection is empty\", () => {\n13: \t\t\tconst collection = Collection.fromArray([]);\n14: \n15: \t\t\texpect(() => collection.firstOrThrow()).toThrow(\"Collection is empty\");\n16: \t\t});\n17: \t});\n18: \n19: \tdescribe(\"getOrThrow\", () => {\n20: \t\tit(\"should return the element at given 0-indexed position\", () => {\n21: \t\t\tconst collection = Collection.fromArray([\"a\", \"b\", \"c\"]);\n22: \n23: \t\t\texpect(collection.getOrThrow(1)).toBe(\"b\");\n24: \t\t});\n25: \n26: \t\tit(\"should throw when index is out of bounds\", () => {\n27: \t\t\tconst collection = Collection.fromArray([1, 2]);\n28: \n29: \t\t\texpect(() => collection.getOrThrow(-1)).toThrow(\n30: \t\t\t\t\"No element at position -1\",\n31: \t\t\t);\n32: \t\t\texpect(() => collection.getOrThrow(2)).toThrow(\n33: \t\t\t\t\"No element at position 2\",\n34: \t\t\t);\n35: \t\t});\n36: \n37: \t\tit(\"should throw when collection is empty\", () => {\n38: \t\t\tconst collection = Collection.fromArray<number>([]);\n39: \n40: \t\t\texpect(() => collection.getOrThrow(0)).toThrow(\n41: \t\t\t\t\"No element at position 0\",\n42: \t\t\t);\n43: \t\t});\n44: \t});\n45: \n46: \tdescribe(\"iterable\", () => {\n47: \t\tit(\"should support for...of iteration\", () => {\n48: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n49: \t\t\tconst result: number[] = [];\n50: \n51: \t\t\tfor (const element of collection) {\n52: \t\t\t\tresult.push(element);\n53: \t\t\t}\n54: \n55: \t\t\texpect(result).toEqual([1, 2, 3]);\n56: \t\t});\n57: \n58: \t\tit(\"should support spread operator\", () => {\n59: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n60: \n61: \t\t\texpect([...collection]).toEqual([1, 2, 3]);\n62: \t\t});\n63: \n64: \t\tit(\"should produce no values when empty\", () => {\n65: \t\t\tconst collection = Collection.fromArray<number>([]);\n66: \n67: \t\t\texpect([...collection]).toEqual([]);\n68: \t\t});\n69: \t});\n70: \n71: \tdescribe(\"map\", () => {\n72: \t\tit(\"should transform each element\", () => {\n73: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n74: \n75: \t\t\tconst result = collection.map((element) => element * 2);\n76: \n77: \t\t\texpect([...result]).toEqual([2, 4, 6]);\n78: \t\t});\n79: \n80: \t\tit(\"should return an empty collection when empty\", () => {\n81: \t\t\tconst collection = Collection.fromArray<number>([]);\n82: \n83: \t\t\tconst result = collection.map((element) => element * 2);\n84: \n85: \t\t\texpect(result.isEmpty()).toBe(true);\n86: \t\t});\n87: \t});\n88: \n89: \tdescribe(\"filter\", () => {\n90: \t\tit(\"should keep elements matching the predicate\", () => {\n91: \t\t\tconst collection = Collection.fromArray([1, 2, 3, 4]);\n92: \n93: \t\t\tconst result = collection.filter((element) => element % 2 === 0);\n94: \n95: \t\t\texpect([...result]).toEqual([2, 4]);\n96: \t\t});\n97: \n98: \t\tit(\"should return an empty collection when none match\", () => {\n99: \t\t\tconst collection = Collection.fromArray([1, 3, 5]);\n100: \n101: \t\t\tconst result = collection.filter((element) => element % 2 === 0);\n102: \n103: \t\t\texpect(result.isEmpty()).toBe(true);\n104: \t\t});\n105: \t});\n106: \n107: \tdescribe(\"reduce\", () => {\n108: \t\tit(\"should accumulate elements into a single value\", () => {\n109: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n110: \n111: \t\t\tconst result = collection.reduce(\n112: \t\t\t\t(accumulator, element) => accumulator + element,\n113: \t\t\t\t0,\n114: \t\t\t);\n115: \n116: \t\t\texpect(result).toBe(6);\n117: \t\t});\n118: \n119: \t\tit(\"should return initial value when empty\", () => {\n120: \t\t\tconst collection = Collection.fromArray<number>([]);\n121: \n122: \t\t\tconst result = collection.reduce(\n123: \t\t\t\t(accumulator, element) => accumulator + element,\n124: \t\t\t\t42,\n125: \t\t\t);\n126: \n127: \t\t\texpect(result).toBe(42);\n128: \t\t});\n129: \t});\n130: \n131: \tdescribe(\"forEach\", () => {\n132: \t\tit(\"should execute callback for each element\", () => {\n133: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n134: \t\t\tconst result: number[] = [];\n135: \n136: \t\t\tcollection.forEach((element) => result.push(element));\n137: \n138: \t\t\texpect(result).toEqual([1, 2, 3]);\n139: \t\t});\n140: \n141: \t\tit(\"should pass the index to the callback\", () => {\n142: \t\t\tconst collection = Collection.fromArray([\"a\", \"b\", \"c\"]);\n143: \t\t\tconst indices: number[] = [];\n144: \n145: \t\t\tcollection.forEach((_element, index) => indices.push(index));\n146: \n147: \t\t\texpect(indices).toEqual([0, 1, 2]);\n148: \t\t});\n149: \n150: \t\tit(\"should not execute callback when empty\", () => {\n151: \t\t\tconst collection = Collection.fromArray<number>([]);\n152: \t\t\tconst result: number[] = [];\n153: \n154: \t\t\tcollection.forEach((element) => result.push(element));\n155: \n156: \t\t\texpect(result).toEqual([]);\n157: \t\t});\n158: \t});\n159: \n160: \tdescribe(\"length\", () => {\n161: \t\tit(\"should return the number of elements\", () => {\n162: \t\t\tconst collection = Collection.fromArray([1, 2, 3]);\n163: \n164: \t\t\texpect(collection.length).toBe(3);\n165: \t\t});\n166: \n167: \t\tit(\"should return zero when empty\", () => {\n168: \t\t\tconst collection = Collection.fromArray([]);\n169: \n170: \t\t\texpect(collection.length).toBe(0);\n171: \t\t});\n172: \t});\n173: \n174: \tdescribe(\"isEmpty\", () => {\n175: \t\tit(\"should return true when collection has no elements\", () => {\n176: \t\t\tconst collection = Collection.fromArray([]);\n177: \n178: \t\t\texpect(collection.isEmpty()).toBe(true);\n179: \t\t});\n180: \n181: \t\tit(\"should return false when collection has elements\", () => {\n182: \t\t\tconst collection = Collection.fromArray([1]);\n183: \n184: \t\t\texpect(collection.isEmpty()).toBe(false);\n185: \t\t});\n186: \t});\n187: });\n188: \n\n(End of file - total 188 lines)\n</content>",
+          "timestamp": "2026-02-13T14:31:10.323+00:00"
+        },
+        {
+          "type": "user",
+          "text": "corrige les problèmes remontés par biome dans @phaser/tests/domain/Collection.test.ts en utilisant une fonction qui ne renvoie pas de valeur pour les tests de forEach",
+          "timestamp": "2026-02-13T14:31:10.323+00:00"
+        },
+        {
+          "type": "user",
+          "text": "Called the Read tool with the following input: {\"filePath\":\"/Users/cmnemoi/code/monster-hotel/phaser/tests/domain/Collection.test.ts\"}",
+          "timestamp": "2026-02-13T14:31:10.323+00:00"
+        },
+        {
+          "type": "tool_use",
+          "name": "bash",
+          "input": {
+            "command": "yarn lint phaser/tests/domain/Collection.test.ts",
+            "description": "Check biome issues in test file"
+          },
+          "timestamp": "2026-02-13T14:31:10.335+00:00"
+        },
+        {
+          "type": "tool_use",
+          "name": "edit",
+          "input": {
+            "filePath": "/Users/cmnemoi/code/monster-hotel/phaser/tests/domain/Collection.test.ts",
+            "newString": "\t\tcollection.forEach((element) => {\n\t\t\tresult.push(element);\n\t\t});\n\n\t\t\texpect(result).toEqual([1, 2, 3]);",
+            "oldString": "\t\tcollection.forEach((element) => result.push(element));\n\n\t\t\texpect(result).toEqual([1, 2, 3]);"
+          },
+          "timestamp": "2026-02-13T14:31:17.222+00:00"
+        },
+        {
+          "type": "tool_use",
+          "name": "edit",
+          "input": {
+            "filePath": "/Users/cmnemoi/code/monster-hotel/phaser/tests/domain/Collection.test.ts",
+            "newString": "\t\tcollection.forEach((_element, index) => {\n\t\t\tindices.push(index);\n\t\t});\n\n\t\t\texpect(indices).toEqual([0, 1, 2]);",
+            "oldString": "\t\tcollection.forEach((_element, index) => indices.push(index));\n\n\t\t\texpect(indices).toEqual([0, 1, 2]);"
+          },
+          "timestamp": "2026-02-13T14:31:17.222+00:00"
+        },
+        {
+          "type": "tool_use",
+          "name": "edit",
+          "input": {
+            "filePath": "/Users/cmnemoi/code/monster-hotel/phaser/tests/domain/Collection.test.ts",
+            "newString": "\t\tcollection.forEach((element) => {\n\t\t\tresult.push(element);\n\t\t});\n\n\t\t\texpect(result).toEqual([]);",
+            "oldString": "\t\tcollection.forEach((element) => result.push(element));\n\n\t\t\texpect(result).toEqual([]);"
+          },
+          "timestamp": "2026-02-13T14:31:17.222+00:00"
+        }
+      ],
+      "total_additions": 3,
+      "total_deletions": 1,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "92843a6ef671d6c1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3b2a9c379ffeO83QZ9eq3XZ3gk",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 865,
+      "total_deletions": 318,
+      "accepted_lines": 110,
+      "overriden_lines": 0
+    },
+    "e69c3e78328b039f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3b280ccceffeN3TK980Wx7yFjV",
+        "model": "openrouter/anthropic/claude-opus-4.6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 20,
+      "total_deletions": 7,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
