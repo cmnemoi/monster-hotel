@@ -2,28 +2,35 @@ import type { AssetConfig } from "#phaser/domain/AssetConfig";
 import type { OriginValue } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
 
+export type PhaserImageConfig = {
+	assetConfig: AssetConfig;
+	position?: Position;
+};
+
 /**
  * Fluent wrapper around Phaser.GameObjects.Image.
  */
 export class PhaserImage {
+	public static create(
+		parent: Phaser.GameObjects.Container,
+		config: PhaserImageConfig,
+	): PhaserImage {
+		const image = new PhaserImage(parent.scene, config);
+		parent.add(image.gameObject);
+		return image;
+	}
+
 	public readonly gameObject: Phaser.GameObjects.Image;
 
-	constructor(
-		parent: Phaser.GameObjects.Container,
-		config: {
-			assetConfig: AssetConfig;
-			position?: Position;
-		},
-	) {
+	private constructor(scene: Phaser.Scene, config: PhaserImageConfig) {
 		const { assetConfig, position } = config;
 		this.gameObject = new Phaser.GameObjects.Image(
-			parent.scene,
+			scene,
 			position?.x ?? 0,
 			position?.y ?? 0,
 			assetConfig.atlasKey,
 			assetConfig.frame,
 		);
-		parent.add(this.gameObject);
 	}
 
 	public withOrigin(origin: OriginValue): this {
@@ -44,8 +51,8 @@ export class PhaserImage {
 		return this;
 	}
 
-	public withFacing(facing: boolean): this {
-		this.gameObject.setFlipX(facing);
+	public withFacing(isFacingLeft: boolean): this {
+		this.gameObject.setFlipX(isFacingLeft);
 		return this;
 	}
 

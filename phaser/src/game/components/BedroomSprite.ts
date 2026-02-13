@@ -13,9 +13,9 @@ const PADDING = 10;
 export class BedroomSprite extends RoomSprite {
 	private base!: PhaserImage;
 	private vignette!: PhaserImage;
-	private wallTop!: PhaserImage;
-	private wallLeft!: PhaserImage;
-	private wallRight!: PhaserImage;
+	private topWall!: PhaserImage;
+	private leftWall!: PhaserImage;
+	private rightWall!: PhaserImage;
 	private bottomPad!: PhaserImage;
 
 	private layout = BedroomLayout.fromRoom({
@@ -39,31 +39,31 @@ export class BedroomSprite extends RoomSprite {
 	}
 
 	private buildVisuals() {
-		this.base = new PhaserImage(this, {
+		this.base = PhaserImage.create(this, {
 			assetConfig: Assets.baseRoom,
 		}).withOrigin(Origin.BOTTOM_LEFT);
 
-		this.vignette = new PhaserImage(this, {
+		this.vignette = PhaserImage.create(this, {
 			assetConfig: Assets.roomVignetage,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallTop = new PhaserImage(this, {
+		this.topWall = PhaserImage.create(this, {
 			assetConfig: Assets.topWall,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallLeft = new PhaserImage(this, {
+		this.leftWall = PhaserImage.create(this, {
 			assetConfig: Assets.leftWall,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallRight = new PhaserImage(this, {
+		this.rightWall = PhaserImage.create(this, {
 			assetConfig: Assets.rightWall,
 			position: { x: ROOM_WIDTH, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
-		this.bottomPad = new PhaserImage(this, {
+		this.bottomPad = PhaserImage.create(this, {
 			assetConfig: Assets.squareBlue,
 		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
@@ -88,15 +88,15 @@ export class BedroomSprite extends RoomSprite {
 			.moveTo({ x: 0, y: -this.layout.roomHeight })
 			.resize({ width: this.layout.roomWidth, height: this.layout.roomHeight });
 
-		this.wallTop
+		this.topWall
 			.moveTo({ x: 0, y: -this.layout.roomHeight })
 			.resize({ width: this.layout.roomWidth });
 
-		this.wallLeft
+		this.leftWall
 			.moveTo({ x: 0, y: -this.layout.roomHeight })
 			.resize({ height: this.layout.roomHeight });
 
-		this.wallRight
+		this.rightWall
 			.moveTo({ x: this.layout.roomWidth, y: -this.layout.roomHeight })
 			.resize({ height: this.layout.roomHeight });
 

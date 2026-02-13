@@ -8,17 +8,16 @@ import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { LobbyLayout } from "#phaser/domain/LobbyLayout";
 import { Origin } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
+import { SpriteAnimations } from "#phaser/domain/SpriteAnimations";
+import { SpriteAssets } from "#phaser/domain/SpriteAssets";
 import { ROOM_HEIGHT } from "../constants";
 import { PhaserImage } from "./PhaserImage";
+import { PhaserSprite } from "./PhaserSprite";
 import { RoomSprite } from "./RoomSprite";
-
-const GROOM_ATLAS_KEY = "monsters2.hd";
 
 const PADDING = 10;
 const LOBBY_BACKGROUND_WIDTH = 512;
 
-const GROOM_IDLE_FRAME_COUNT = 30;
-const GROOM_IDLE_FRAME_RATE = 15;
 const GROOM_CHAIR_OFFSET_Y = 55;
 
 export class LobbySprite extends RoomSprite {
@@ -65,12 +64,12 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildBackground() {
-		new PhaserImage(this, { assetConfig: Assets.roomLobby }).withOrigin(
+		PhaserImage.create(this, { assetConfig: Assets.roomLobby }).withOrigin(
 			Origin.BOTTOM_LEFT,
 		);
 
 		if (this.layout.tiledWallWidth > 0) {
-			new PhaserImage(this, {
+			PhaserImage.create(this, {
 				assetConfig: Assets.lobbyWallTile,
 				position: { x: LOBBY_BACKGROUND_WIDTH, y: 0 },
 			})
@@ -81,60 +80,43 @@ export class LobbySprite extends RoomSprite {
 				});
 		}
 
-		new PhaserImage(this, {
+		PhaserImage.create(this, {
 			assetConfig: Assets.lobbyEndPillar,
 			position: { x: this.layout.totalWidth, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
-		new PhaserImage(this, { assetConfig: Assets.squareBlue })
+		PhaserImage.create(this, { assetConfig: Assets.squareBlue })
 			.withOrigin(Origin.BOTTOM_LEFT)
 			.withDisplaySize({ width: this.layout.totalWidth, height: PADDING });
 	}
 
 	private buildDesk() {
-		new PhaserImage(this, {
+		PhaserImage.create(this, {
 			assetConfig: Assets.lobbyDesk,
 			position: { x: 55, y: -PADDING },
 		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
 
 	private buildGroomCat() {
-		const groomAnimKey = "lobby.groomCatIdle";
-		if (!this.scene.anims.exists(groomAnimKey)) {
-			this.scene.anims.create({
-				key: groomAnimKey,
-				frames: this.scene.anims.generateFrameNames(GROOM_ATLAS_KEY, {
-					prefix: "groomCatIdle/groomCatIdle_",
-					start: 0,
-					end: GROOM_IDLE_FRAME_COUNT - 1,
-					zeroPad: 4,
-				}),
-				frameRate: GROOM_IDLE_FRAME_RATE,
-				repeat: -1,
-			});
-		}
-
-		const groom = this.scene.add.sprite(
-			100,
-			-PADDING - GROOM_CHAIR_OFFSET_Y,
-			GROOM_ATLAS_KEY,
-			"groomCatIdle/groomCatIdle_0000",
-		);
-		groom.setOrigin(0.5, 1);
-		groom.play(groomAnimKey);
-		this.add(groom);
+		PhaserSprite.create(this, {
+			assetConfig: SpriteAssets.groomCat.idle,
+			position: { x: 100, y: -PADDING - GROOM_CHAIR_OFFSET_Y },
+		})
+			.withOrigin(Origin.BOTTOM_CENTER)
+			.withAnimations(SpriteAnimations.groomCat)
+			.playIdle();
 	}
 
 	private buildDecorations() {
 		for (const position of this.layout.visiblePillars) {
-			new PhaserImage(this, {
+			PhaserImage.create(this, {
 				assetConfig: Assets.lobbyPillar,
 				position: { x: position.x, y: -PADDING },
 			}).withOrigin(Origin.BOTTOM_CENTER);
 		}
 
 		for (const position of this.layout.visibleWindows) {
-			new PhaserImage(this, {
+			PhaserImage.create(this, {
 				assetConfig: Assets.lobbyWindow,
 				position: { x: position.x, y: -ROOM_HEIGHT + 15 },
 			})
@@ -145,13 +127,13 @@ export class LobbySprite extends RoomSprite {
 
 	private buildWaitingQueue() {
 		for (const slot of this.layout.queueSlots) {
-			new PhaserImage(this, {
+			PhaserImage.create(this, {
 				assetConfig: Assets.lobbyWaitingPillar,
 				position: { x: slot.pillarPosition.x, y: -PADDING },
 			}).withOrigin(Origin.BOTTOM_CENTER);
 
 			if (slot.hasTile) {
-				new PhaserImage(this, {
+				PhaserImage.create(this, {
 					assetConfig: Assets.lobbyWaitingTile,
 					position: { x: slot.tilePosition.x, y: -55 - PADDING },
 				})
@@ -175,7 +157,6 @@ export class LobbySprite extends RoomSprite {
 				position: slot.clientPosition,
 			});
 			this.queueClientSprites.push(sprite);
-			this.add(sprite);
 		}
 	}
 
@@ -186,33 +167,14 @@ export class LobbySprite extends RoomSprite {
 		config: ClientSpriteConfig;
 		position: Position;
 	}): Phaser.GameObjects.Sprite {
-		const animKey = `lobby.queue.${position.x}.idle`;
-		if (!this.scene.anims.exists(animKey)) {
-			this.scene.anims.create({
-				key: animKey,
-				frames: this.scene.anims.generateFrameNames(config.atlasKey, {
-					prefix: config.idlePrefix,
-					start: 0,
-					end: config.idleFrameCount,
-					zeroPad: 4,
-				}),
-				frameRate: config.idleFrameRate,
-				repeat: -1,
-			});
-		}
-
-		const firstFrame = `${config.idlePrefix}0000`;
-		const sprite = new Phaser.GameObjects.Sprite(
-			this.scene,
-			position.x,
-			-PADDING,
-			config.atlasKey,
-			firstFrame,
-		);
-		sprite.setOrigin(0.5, 1);
-		sprite.setScale(config.scale);
-		sprite.setFlipX(true);
-		sprite.play(animKey);
-		return sprite;
+		return PhaserSprite.create(this, {
+			assetConfig: config.assetConfig,
+			position: { x: position.x, y: -PADDING },
+		})
+			.withOrigin(Origin.BOTTOM_CENTER)
+			.withScale({ x: config.scale })
+			.withAnimations(config.animations)
+			.facingLeft()
+			.playIdle().gameObject;
 	}
 }

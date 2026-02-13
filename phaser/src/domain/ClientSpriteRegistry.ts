@@ -1,43 +1,28 @@
+import type { AssetConfig } from "#phaser/domain/AssetConfig";
+import type { SpriteAnimationCatalogEntry } from "#phaser/domain/SpriteAnimations";
+import { SpriteAnimations } from "#phaser/domain/SpriteAnimations";
+import { SpriteAssets } from "#phaser/domain/SpriteAssets";
+
 export type ClientSpriteConfig = {
-	atlasKey: string;
-	idlePrefix: string;
-	walkPrefix: string;
-	idleFrameCount: number;
-	walkFrameCount: number;
+	assetConfig: AssetConfig;
+	animations: SpriteAnimationCatalogEntry;
 	scale: number;
-	idleFrameRate: number;
-	walkFrameRate: number;
 };
 
 export const CLIENT_SPRITE_REGISTRY: Record<string, ClientSpriteConfig> = {
 	poring: {
-		atlasKey: "monsters0.hd",
-		idlePrefix: "monsterPoringIdle/monsterPoringIdle_",
-		walkPrefix: "monsterPoringWalk/monsterPoringWalk_",
-		idleFrameCount: 12,
-		walkFrameCount: 17,
+		assetConfig: SpriteAssets.monsterPoring.idle,
+		animations: SpriteAnimations.monsterPoring,
 		scale: 1,
-		idleFrameRate: 15,
-		walkFrameRate: 30,
 	},
 	bomber: {
-		atlasKey: "monsters0.hd",
-		idlePrefix: "monsterBombIdle/monsterBombIdle_",
-		walkPrefix: "monsterBomb/monsterBombWalk_",
-		idleFrameCount: 2,
-		walkFrameCount: 19,
+		assetConfig: SpriteAssets.monsterBomb.idle,
+		animations: SpriteAnimations.monsterBomb,
 		scale: 1,
-		idleFrameRate: 15,
-		walkFrameRate: 30,
 	},
 	"nice neighbour": {
-		atlasKey: "monsters1.hd",
-		idlePrefix: "monsterEmpathy/monsterEmpathyIdle_",
-		walkPrefix: "monsterEmpathy/monsterEmpathyIdle_",
-		idleFrameCount: 9,
-		walkFrameCount: 9,
+		assetConfig: SpriteAssets.monsterEmpathy.idle,
+		animations: SpriteAnimations.monsterEmpathy,
 		scale: 1,
-		idleFrameRate: 15,
-		walkFrameRate: 15,
 	},
 };

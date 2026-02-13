@@ -23,7 +23,6 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 
 	static create(scene: Phaser.Scene, params: ClientSpriteParams): ClientSprite {
 		const config = ClientSprite.getConfigFromType(params.clientType);
-		const animationNamespace = `client.${params.clientType}`;
 		const behavior = new ClientBehavior({
 			minX: params.roomWidth * MOVEMENT_BOUNDS_MIN_RATIO,
 			maxX: params.roomWidth * MOVEMENT_BOUNDS_MAX_RATIO,
@@ -34,7 +33,7 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 			scene,
 			x: params.roomWidth / 2,
 			y: -params.roomPadding,
-			animation: new ClientAnimation({ scene, config, animationNamespace }),
+			config,
 			behavior,
 		});
 	}
@@ -43,22 +42,24 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 		scene,
 		x,
 		y,
-		animation,
+		config,
 		behavior,
 	}: {
 		scene: Phaser.Scene;
 		x: number;
 		y: number;
-		animation: ClientAnimation;
+		config: ClientSpriteConfig;
 		behavior: ClientBehavior;
 	}) {
 		super(scene, x, y);
-		this.animation = animation;
+		this.animation = new ClientAnimation({
+			parent: this,
+			config,
+		});
 		this.behavior = behavior;
 		this.animation.onCycleComplete(() => {
 			this.behavior.notifyAnimationCycleComplete();
 		});
-		this.add(animation.getPhaserSprite());
 		scene.add.existing(this);
 	}
 

@@ -37,7 +37,7 @@ export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	}
 
 	private renderElement(element: FacadeElement): void {
-		new PhaserImage(this, {
+		PhaserImage.create(this, {
 			assetConfig: element.assetConfig,
 			position: element.position,
 		})

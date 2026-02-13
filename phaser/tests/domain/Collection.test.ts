@@ -133,7 +133,9 @@ describe("Collection", () => {
 			const collection = Collection.fromArray([1, 2, 3]);
 			const result: number[] = [];
 
-			collection.forEach((element) => result.push(element));
+			collection.forEach((element) => {
+				result.push(element);
+			});
 
 			expect(result).toEqual([1, 2, 3]);
 		});
@@ -142,7 +144,9 @@ describe("Collection", () => {
 			const collection = Collection.fromArray(["a", "b", "c"]);
 			const indices: number[] = [];
 
-			collection.forEach((_element, index) => indices.push(index));
+			collection.forEach((_element, index) => {
+				indices.push(index);
+			});
 
 			expect(indices).toEqual([0, 1, 2]);
 		});
@@ -151,7 +155,9 @@ describe("Collection", () => {
 			const collection = Collection.fromArray<number>([]);
 			const result: number[] = [];
 
-			collection.forEach((element) => result.push(element));
+			collection.forEach((element) => {
+				result.push(element);
+			});
 
 			expect(result).toEqual([]);
 		});
