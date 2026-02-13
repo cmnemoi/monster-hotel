@@ -1,21 +1,22 @@
+import { Assets } from "#phaser/domain/Assets";
 import { BedroomLayout } from "#phaser/domain/BedroomLayout";
 import type { Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
+import { Origin } from "#phaser/domain/Origin";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { ClientSprite } from "./ClientSprite";
+import { PhaserImage } from "./PhaserImage";
 import { RoomSprite } from "./RoomSprite";
 
 const PADDING = 10;
-const ROOM_ATLAS_KEY = "rooms0";
-const TILES_ATLAS_KEY = "tilesheet0";
 
 export class BedroomSprite extends RoomSprite {
-	private base!: Phaser.GameObjects.Image;
-	private vignette!: Phaser.GameObjects.Image;
-	private wallTop!: Phaser.GameObjects.Image;
-	private wallLeft!: Phaser.GameObjects.Image;
-	private wallRight!: Phaser.GameObjects.Image;
-	private bottomPad!: Phaser.GameObjects.Image;
+	private base!: PhaserImage;
+	private vignette!: PhaserImage;
+	private wallTop!: PhaserImage;
+	private wallLeft!: PhaserImage;
+	private wallRight!: PhaserImage;
+	private bottomPad!: PhaserImage;
 
 	private layout = BedroomLayout.fromRoom({
 		room: { id: "", type: "bedroom", position: { x: 0, y: 0 }, client: null },
@@ -38,65 +39,33 @@ export class BedroomSprite extends RoomSprite {
 	}
 
 	private buildVisuals() {
-		this.base = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			0,
-			ROOM_ATLAS_KEY,
-			"roomNew",
-		);
-		this.base.setOrigin(0, 1);
-		this.add(this.base);
+		this.base = new PhaserImage(this, {
+			assetConfig: Assets.baseRoom,
+		}).withOrigin(Origin.BOTTOM_LEFT);
 
-		this.vignette = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			-ROOM_HEIGHT,
-			TILES_ATLAS_KEY,
-			"roomVignetage",
-		);
-		this.vignette.setOrigin(0, 0);
-		this.add(this.vignette);
+		this.vignette = new PhaserImage(this, {
+			assetConfig: Assets.roomVignetage,
+			position: { x: 0, y: -ROOM_HEIGHT },
+		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallTop = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			-ROOM_HEIGHT,
-			TILES_ATLAS_KEY,
-			"wallTop/wallTop_0000",
-		);
-		this.wallTop.setOrigin(0, 0);
-		this.add(this.wallTop);
+		this.wallTop = new PhaserImage(this, {
+			assetConfig: Assets.topWall,
+			position: { x: 0, y: -ROOM_HEIGHT },
+		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallLeft = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			-ROOM_HEIGHT,
-			TILES_ATLAS_KEY,
-			"wallLeft/wallLeft_0000",
-		);
-		this.wallLeft.setOrigin(0, 0);
-		this.add(this.wallLeft);
+		this.wallLeft = new PhaserImage(this, {
+			assetConfig: Assets.leftWall,
+			position: { x: 0, y: -ROOM_HEIGHT },
+		}).withOrigin(Origin.TOP_LEFT);
 
-		this.wallRight = new Phaser.GameObjects.Image(
-			this.scene,
-			ROOM_WIDTH,
-			-ROOM_HEIGHT,
-			TILES_ATLAS_KEY,
-			"wallRight/wallRight_0000",
-		);
-		this.wallRight.setOrigin(1, 0);
-		this.add(this.wallRight);
+		this.wallRight = new PhaserImage(this, {
+			assetConfig: Assets.rightWall,
+			position: { x: ROOM_WIDTH, y: -ROOM_HEIGHT },
+		}).withOrigin(Origin.TOP_RIGHT);
 
-		this.bottomPad = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			0,
-			TILES_ATLAS_KEY,
-			"squareBlue",
-		);
-		this.bottomPad.setOrigin(0, 1);
-		this.add(this.bottomPad);
+		this.bottomPad = new PhaserImage(this, {
+			assetConfig: Assets.squareBlue,
+		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
 
 	private updateLayout({ room, roomSize }: { room: Room; roomSize: number }) {
@@ -111,26 +80,29 @@ export class BedroomSprite extends RoomSprite {
 	}
 
 	private applyLayout() {
-		this.base.displayWidth = this.layout.roomWidth;
-		this.base.displayHeight = this.layout.roomHeight;
-		this.base.setPosition(0, 0);
+		this.base
+			.moveTo({ x: 0, y: 0 })
+			.resize({ width: this.layout.roomWidth, height: this.layout.roomHeight });
 
-		this.vignette.setPosition(0, -this.layout.roomHeight);
-		this.vignette.displayWidth = this.layout.roomWidth;
-		this.vignette.displayHeight = this.layout.roomHeight;
+		this.vignette
+			.moveTo({ x: 0, y: -this.layout.roomHeight })
+			.resize({ width: this.layout.roomWidth, height: this.layout.roomHeight });
 
-		this.wallTop.setPosition(0, -this.layout.roomHeight);
-		this.wallTop.displayWidth = this.layout.roomWidth;
+		this.wallTop
+			.moveTo({ x: 0, y: -this.layout.roomHeight })
+			.resize({ width: this.layout.roomWidth });
 
-		this.wallLeft.setPosition(0, -this.layout.roomHeight);
-		this.wallLeft.displayHeight = this.layout.roomHeight;
+		this.wallLeft
+			.moveTo({ x: 0, y: -this.layout.roomHeight })
+			.resize({ height: this.layout.roomHeight });
 
-		this.wallRight.setPosition(this.layout.roomWidth, -this.layout.roomHeight);
-		this.wallRight.displayHeight = this.layout.roomHeight;
+		this.wallRight
+			.moveTo({ x: this.layout.roomWidth, y: -this.layout.roomHeight })
+			.resize({ height: this.layout.roomHeight });
 
-		this.bottomPad.setPosition(0, 0);
-		this.bottomPad.displayWidth = this.layout.roomWidth;
-		this.bottomPad.displayHeight = PADDING;
+		this.bottomPad
+			.moveTo({ x: 0, y: 0 })
+			.resize({ width: this.layout.roomWidth, height: PADDING });
 	}
 
 	public updateState(room: Room) {

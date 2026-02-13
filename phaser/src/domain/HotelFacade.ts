@@ -1,3 +1,7 @@
+import type { AssetConfig } from "#phaser/domain/AssetConfig";
+import { Assets } from "#phaser/domain/Assets";
+import { Origin, type OriginValue } from "#phaser/domain/Origin";
+import type { Position } from "#phaser/domain/Position";
 import { SeededRandom } from "#phaser/domain/SeededRandom";
 
 const ROOM_WIDTH = 512;
@@ -26,21 +30,21 @@ const CHIMNEY_SCALE_MIN = 0.7;
 const CHIMNEY_SCALE_MAX = 1.5;
 
 const PARIS_WALL_VARIANTS = [
-	"parisWall/parisWall_0000",
-	"parisWall/parisWall_0001",
-	"parisWall/parisWall_0002",
+	Assets.parisWallVariant0,
+	Assets.parisWallVariant1,
+	Assets.parisWallVariant2,
 ] as const;
 
 const PARIS_PIPE_VARIANTS = [
-	"parisPipe/parisPipe_0000",
-	"parisPipe/parisPipe_0001",
+	Assets.parisPipeVariant0,
+	Assets.parisPipeVariant1,
 ] as const;
 
 const PARIS_CHIMNEY_VARIANTS = [
-	"parisChimney/parisChimney_0000",
-	"parisChimney/parisChimney_0001",
-	"parisChimney/parisChimney_0002",
-	"parisChimney/parisChimney_0003",
+	Assets.parisChimneyVariant0,
+	Assets.parisChimneyVariant1,
+	Assets.parisChimneyVariant2,
+	Assets.parisChimneyVariant3,
 ] as const;
 
 type FacadeCell = {
@@ -53,13 +57,10 @@ type FacadeCell = {
 };
 
 export type FacadeElement = {
-	frameName: string;
-	worldX: number;
-	worldY: number;
-	originX: number;
-	originY: number;
-	scaleX: number;
-	scaleY: number;
+	assetConfig: AssetConfig;
+	position: Position;
+	origin: OriginValue;
+	scale: { x: number; y: number };
 	flipX: boolean;
 };
 
@@ -144,39 +145,30 @@ export class HotelFacade {
 
 		if (cell.hasRoomToRight) {
 			elements.push({
-				frameName: "parisTest",
-				worldX: cellRight,
-				worldY: cellBottom,
-				originX: 1,
-				originY: 1,
-				scaleX: 1,
-				scaleY: 1,
+				assetConfig: Assets.parisTest,
+				position: { x: cellRight, y: cellBottom },
+				origin: Origin.BOTTOM_RIGHT,
+				scale: { x: 1, y: 1 },
 				flipX: false,
 			});
 		}
 
 		if (cell.hasRoomToLeft) {
 			elements.push({
-				frameName: random.pick(PARIS_WALL_VARIANTS),
-				worldX: cellLeft,
-				worldY: cellBottom,
-				originX: 1,
-				originY: 1,
-				scaleX: -1,
-				scaleY: 1,
+				assetConfig: random.pick(PARIS_WALL_VARIANTS),
+				position: { x: cellLeft, y: cellBottom },
+				origin: Origin.BOTTOM_RIGHT,
+				scale: { x: -1, y: 1 },
 				flipX: false,
 			});
 		}
 
 		if (cell.hasRoomAbove) {
 			elements.push({
-				frameName: "parisCeiling",
-				worldX: cellLeft + CEILING_X_OFFSET,
-				worldY: cellTop,
-				originX: 0,
-				originY: 0,
-				scaleX: 1,
-				scaleY: 1,
+				assetConfig: Assets.parisCeiling,
+				position: { x: cellLeft + CEILING_X_OFFSET, y: cellTop },
+				origin: Origin.TOP_LEFT,
+				scale: { x: 1, y: 1 },
 				flipX: false,
 			});
 
@@ -185,16 +177,16 @@ export class HotelFacade {
 				max: PIPE_SCALE_MAX,
 			});
 			elements.push({
-				frameName: random.pick(PARIS_PIPE_VARIANTS),
-				worldX: random.intRange({
-					min: cellLeft + PIPE_MIN_X_MARGIN,
-					max: cellRight - PIPE_MAX_X_MARGIN,
-				}),
-				worldY: cellTop + CEILING_PIPE_Y_OFFSET,
-				originX: 0.5,
-				originY: 0,
-				scaleX: pipeScale,
-				scaleY: pipeScale,
+				assetConfig: random.pick(PARIS_PIPE_VARIANTS),
+				position: {
+					x: random.intRange({
+						min: cellLeft + PIPE_MIN_X_MARGIN,
+						max: cellRight - PIPE_MAX_X_MARGIN,
+					}),
+					y: cellTop + CEILING_PIPE_Y_OFFSET,
+				},
+				origin: Origin.TOP_CENTER,
+				scale: { x: pipeScale, y: pipeScale },
 				flipX: false,
 			});
 		}
@@ -202,24 +194,18 @@ export class HotelFacade {
 		if (cell.hasRoomBelow) {
 			if (cell.hasRoomAbove) {
 				elements.push({
-					frameName: "parisBalcony",
-					worldX: cellLeft + BALCONY_X_OFFSET,
-					worldY: cellBottom,
-					originX: 0,
-					originY: 1,
-					scaleX: 1,
-					scaleY: 1,
+					assetConfig: Assets.parisBalcony,
+					position: { x: cellLeft + BALCONY_X_OFFSET, y: cellBottom },
+					origin: Origin.BOTTOM_LEFT,
+					scale: { x: 1, y: 1 },
 					flipX: false,
 				});
 			} else {
 				elements.push({
-					frameName: "parisRoof",
-					worldX: cellLeft + ROOF_X_OFFSET,
-					worldY: cellBottom,
-					originX: 0,
-					originY: 1,
-					scaleX: 1,
-					scaleY: ROOF_SCALE_Y,
+					assetConfig: Assets.parisRoof,
+					position: { x: cellLeft + ROOF_X_OFFSET, y: cellBottom },
+					origin: Origin.BOTTOM_LEFT,
+					scale: { x: 1, y: ROOF_SCALE_Y },
 					flipX: false,
 				});
 
@@ -228,16 +214,16 @@ export class HotelFacade {
 					max: CHIMNEY_SCALE_MAX,
 				});
 				elements.push({
-					frameName: random.pick(PARIS_CHIMNEY_VARIANTS),
-					worldX: random.intRange({
-						min: cellLeft + PIPE_MIN_X_MARGIN,
-						max: cellRight - PIPE_MAX_X_MARGIN,
-					}),
-					worldY: cellBottom + CHIMNEY_Y_OFFSET,
-					originX: 0.5,
-					originY: 1,
-					scaleX: chimneyScale,
-					scaleY: chimneyScale,
+					assetConfig: random.pick(PARIS_CHIMNEY_VARIANTS),
+					position: {
+						x: random.intRange({
+							min: cellLeft + PIPE_MIN_X_MARGIN,
+							max: cellRight - PIPE_MAX_X_MARGIN,
+						}),
+						y: cellBottom + CHIMNEY_Y_OFFSET,
+					},
+					origin: Origin.BOTTOM_CENTER,
+					scale: { x: chimneyScale, y: chimneyScale },
 					flipX: false,
 				});
 			}

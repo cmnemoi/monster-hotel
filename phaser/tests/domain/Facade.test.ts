@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { Assets } from "#phaser/domain/Assets";
 import { HotelFacade } from "#phaser/domain/HotelFacade";
+import { Origin } from "#phaser/domain/Origin";
 
 const HOTEL_SEED = 12345;
 
@@ -44,7 +46,7 @@ describe("Facade", () => {
 		});
 
 		const wall = facade.elements.find(
-			(element) => element.frameName === "parisTest",
+			(element) => element.assetConfig === Assets.parisTest,
 		);
 		expect(wall).toBeDefined();
 	});
@@ -56,10 +58,10 @@ describe("Facade", () => {
 		});
 
 		const wall = facade.elements.find((element) =>
-			element.frameName.startsWith("parisWall/parisWall_"),
+			element.assetConfig.frame.startsWith("parisWall/parisWall_"),
 		);
 		expect(wall).toBeDefined();
-		expect(wall?.scaleX).toBe(-1);
+		expect(wall?.scale).toEqual({ x: -1, y: 1 });
 	});
 
 	it("should return ceiling and pipe for cell below a room", () => {
@@ -68,11 +70,14 @@ describe("Facade", () => {
 			hotelSeed: HOTEL_SEED,
 		});
 
-		const ceiling = facade.elements.find((e) => e.frameName === "parisCeiling");
+		const ceiling = facade.elements.find(
+			(e) => e.assetConfig === Assets.parisCeiling,
+		);
 		expect(ceiling).toBeDefined();
+		expect(ceiling?.origin).toEqual(Origin.TOP_LEFT);
 
 		const pipe = facade.elements.find((e) =>
-			e.frameName.startsWith("parisPipe/parisPipe_"),
+			e.assetConfig.frame.startsWith("parisPipe/parisPipe_"),
 		);
 		expect(pipe).toBeDefined();
 	});
@@ -83,11 +88,13 @@ describe("Facade", () => {
 			hotelSeed: HOTEL_SEED,
 		});
 
-		const roof = facade.elements.find((e) => e.frameName === "parisRoof");
+		const roof = facade.elements.find(
+			(e) => e.assetConfig === Assets.parisRoof,
+		);
 		expect(roof).toBeDefined();
 
 		const chimney = facade.elements.find((e) =>
-			e.frameName.startsWith("parisChimney/parisChimney_"),
+			e.assetConfig.frame.startsWith("parisChimney/parisChimney_"),
 		);
 		expect(chimney).toBeDefined();
 	});
@@ -98,7 +105,9 @@ describe("Facade", () => {
 			hotelSeed: HOTEL_SEED,
 		});
 
-		const balcony = facade.elements.find((e) => e.frameName === "parisBalcony");
+		const balcony = facade.elements.find(
+			(e) => e.assetConfig === Assets.parisBalcony,
+		);
 		expect(balcony).toBeDefined();
 	});
 
@@ -109,11 +118,11 @@ describe("Facade", () => {
 		});
 
 		const pipe = facade.elements.find((e) =>
-			e.frameName.startsWith("parisPipe/parisPipe_"),
+			e.assetConfig.frame.startsWith("parisPipe/parisPipe_"),
 		);
 		expect(pipe).toBeDefined();
-		expect(pipe?.scaleX).toBeGreaterThanOrEqual(0.6);
-		expect(pipe?.scaleX).toBeLessThanOrEqual(1.2);
+		expect(pipe?.scale.x).toBeGreaterThanOrEqual(0.6);
+		expect(pipe?.scale.x).toBeLessThanOrEqual(1.2);
 	});
 
 	it("should vary chimney scale within expected range", () => {
@@ -123,10 +132,10 @@ describe("Facade", () => {
 		});
 
 		const chimney = facade.elements.find((e) =>
-			e.frameName.startsWith("parisChimney/parisChimney_"),
+			e.assetConfig.frame.startsWith("parisChimney/parisChimney_"),
 		);
 		expect(chimney).toBeDefined();
-		expect(chimney?.scaleX).toBeGreaterThanOrEqual(0.7);
-		expect(chimney?.scaleX).toBeLessThanOrEqual(1.5);
+		expect(chimney?.scale.x).toBeGreaterThanOrEqual(0.7);
+		expect(chimney?.scale.x).toBeLessThanOrEqual(1.5);
 	});
 });

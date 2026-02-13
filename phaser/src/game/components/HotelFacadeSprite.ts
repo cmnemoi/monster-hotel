@@ -1,6 +1,6 @@
 import { type FacadeElement, HotelFacade } from "#phaser/domain/HotelFacade";
+import { PhaserImage } from "./PhaserImage";
 
-const BG_ATLAS_KEY = "bgAssets.hd";
 const DEFAULT_HOTEL_SEED = 42;
 
 /**
@@ -37,17 +37,12 @@ export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	}
 
 	private renderElement(element: FacadeElement): void {
-		const image = new Phaser.GameObjects.Image(
-			this.scene,
-			element.worldX,
-			element.worldY,
-			BG_ATLAS_KEY,
-			element.frameName,
-		);
-		image
-			.setOrigin(element.originX, element.originY)
-			.setScale(element.scaleX, element.scaleY)
-			.setFlipX(element.flipX);
-		this.add(image);
+		new PhaserImage(this, {
+			assetConfig: element.assetConfig,
+			position: element.position,
+		})
+			.withOrigin(element.origin)
+			.withScale(element.scale)
+			.withFacing(element.flipX);
 	}
 }

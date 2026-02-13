@@ -1,3 +1,4 @@
+import { Assets } from "#phaser/domain/Assets";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
@@ -5,12 +6,12 @@ import {
 import type { ClientInQueue, Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { LobbyLayout } from "#phaser/domain/LobbyLayout";
+import { Origin } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
 import { ROOM_HEIGHT } from "../constants";
+import { PhaserImage } from "./PhaserImage";
 import { RoomSprite } from "./RoomSprite";
 
-const ROOM_ATLAS_KEY = "rooms0";
-const TILES_ATLAS_KEY = "tilesheet0";
 const GROOM_ATLAS_KEY = "monsters2.hd";
 
 const PADDING = 10;
@@ -64,63 +65,37 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildBackground() {
-		const background = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			0,
-			ROOM_ATLAS_KEY,
-			"roomLobby",
+		new PhaserImage(this, { assetConfig: Assets.roomLobby }).withOrigin(
+			Origin.BOTTOM_LEFT,
 		);
-		background.setOrigin(0, 1);
-		this.add(background);
 
 		if (this.layout.tiledWallWidth > 0) {
-			const tiledWall = new Phaser.GameObjects.Image(
-				this.scene,
-				LOBBY_BACKGROUND_WIDTH,
-				0,
-				TILES_ATLAS_KEY,
-				"lobbyWallTile",
-			);
-			tiledWall.setOrigin(0, 1);
-			tiledWall.displayWidth = this.layout.tiledWallWidth;
-			tiledWall.displayHeight = ROOM_HEIGHT;
-			this.add(tiledWall);
+			new PhaserImage(this, {
+				assetConfig: Assets.lobbyWallTile,
+				position: { x: LOBBY_BACKGROUND_WIDTH, y: 0 },
+			})
+				.withOrigin(Origin.BOTTOM_LEFT)
+				.withDisplaySize({
+					width: this.layout.tiledWallWidth,
+					height: ROOM_HEIGHT,
+				});
 		}
 
-		const endPillar = new Phaser.GameObjects.Image(
-			this.scene,
-			this.layout.totalWidth,
-			-ROOM_HEIGHT,
-			TILES_ATLAS_KEY,
-			"lobbyEndPillar",
-		);
-		endPillar.setOrigin(1, 0);
-		this.add(endPillar);
+		new PhaserImage(this, {
+			assetConfig: Assets.lobbyEndPillar,
+			position: { x: this.layout.totalWidth, y: -ROOM_HEIGHT },
+		}).withOrigin(Origin.TOP_RIGHT);
 
-		const bottomPad = new Phaser.GameObjects.Image(
-			this.scene,
-			0,
-			0,
-			TILES_ATLAS_KEY,
-			"squareBlue",
-		);
-		bottomPad.setOrigin(0, 1);
-		bottomPad.displayWidth = this.layout.totalWidth;
-		bottomPad.displayHeight = PADDING;
-		this.add(bottomPad);
+		new PhaserImage(this, { assetConfig: Assets.squareBlue })
+			.withOrigin(Origin.BOTTOM_LEFT)
+			.withDisplaySize({ width: this.layout.totalWidth, height: PADDING });
 	}
 
 	private buildDesk() {
-		const desk = new Phaser.GameObjects.Image(
-			this.scene,
-			55,
-			-PADDING,
-			TILES_ATLAS_KEY,
-			"lobbyDesk",
-		);
-		desk.setOrigin(0, 1);
-		this.add(desk);
+		new PhaserImage(this, {
+			assetConfig: Assets.lobbyDesk,
+			position: { x: 55, y: -PADDING },
+		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
 
 	private buildGroomCat() {
@@ -152,54 +127,36 @@ export class LobbySprite extends RoomSprite {
 
 	private buildDecorations() {
 		for (const position of this.layout.visiblePillars) {
-			const pillar = new Phaser.GameObjects.Image(
-				this.scene,
-				position.x,
-				-PADDING,
-				TILES_ATLAS_KEY,
-				"lobbyPillar",
-			);
-			pillar.setOrigin(0.5, 1);
-			this.add(pillar);
+			new PhaserImage(this, {
+				assetConfig: Assets.lobbyPillar,
+				position: { x: position.x, y: -PADDING },
+			}).withOrigin(Origin.BOTTOM_CENTER);
 		}
 
 		for (const position of this.layout.visibleWindows) {
-			const lobbyWindow = new Phaser.GameObjects.Image(
-				this.scene,
-				position.x,
-				-ROOM_HEIGHT + 15,
-				TILES_ATLAS_KEY,
-				"lobbyWindow",
-			);
-			lobbyWindow.setOrigin(0.5, 0);
-			lobbyWindow.setScale(0.8);
-			this.add(lobbyWindow);
+			new PhaserImage(this, {
+				assetConfig: Assets.lobbyWindow,
+				position: { x: position.x, y: -ROOM_HEIGHT + 15 },
+			})
+				.withOrigin(Origin.TOP_CENTER)
+				.withScale({ x: 0.8 });
 		}
 	}
 
 	private buildWaitingQueue() {
 		for (const slot of this.layout.queueSlots) {
-			const waitingPillar = new Phaser.GameObjects.Image(
-				this.scene,
-				slot.pillarPosition.x,
-				-PADDING,
-				TILES_ATLAS_KEY,
-				"lobbyWaitingPillar",
-			);
-			waitingPillar.setOrigin(0.5, 1);
-			this.add(waitingPillar);
+			new PhaserImage(this, {
+				assetConfig: Assets.lobbyWaitingPillar,
+				position: { x: slot.pillarPosition.x, y: -PADDING },
+			}).withOrigin(Origin.BOTTOM_CENTER);
 
 			if (slot.hasTile) {
-				const waitingTile = new Phaser.GameObjects.Image(
-					this.scene,
-					slot.tilePosition.x,
-					-55 - PADDING,
-					TILES_ATLAS_KEY,
-					"lobbyWaitingTile",
-				);
-				waitingTile.setOrigin(0, 1);
-				waitingTile.displayWidth = this.layout.slotWidth;
-				this.add(waitingTile);
+				new PhaserImage(this, {
+					assetConfig: Assets.lobbyWaitingTile,
+					position: { x: slot.tilePosition.x, y: -55 - PADDING },
+				})
+					.withOrigin(Origin.BOTTOM_LEFT)
+					.withDisplaySize({ width: this.layout.slotWidth });
 			}
 		}
 	}
