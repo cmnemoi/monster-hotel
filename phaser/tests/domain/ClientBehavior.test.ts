@@ -13,6 +13,12 @@ describe("ClientBehavior", () => {
 		expect(behavior.state().animationPhase).toBe("idle");
 	});
 
+	it("should signal animation phase changed on initial state", () => {
+		const behavior = givenClientBehavior();
+
+		expect(behavior.state().hasAnimationPhaseChanged).toBe(true);
+	});
+
 	it("should start at center of bounds", () => {
 		const behavior = givenClientBehavior();
 
@@ -85,16 +91,13 @@ describe("ClientBehavior", () => {
 	});
 
 	it("should report hasAnimationPhaseChanged on first walk transition", () => {
-		const behavior = givenClientBehavior();
-		expect(behavior.state().hasAnimationPhaseChanged).toBe(false);
-
 		// expire idle
 		const random = new FixedRandomGenerator();
 		random.setNextFloatRangeResult(2000);
-		const b = new ClientBehavior(MIN_X, MAX_X, random);
-		b.update(Duration.fromMilliseconds(2_001));
+		const behavior = new ClientBehavior(MIN_X, MAX_X, random);
+		behavior.update(Duration.fromMilliseconds(2_001));
 
-		expect(b.state().hasAnimationPhaseChanged).toBe(true);
+		expect(behavior.state().hasAnimationPhaseChanged).toBe(true);
 	});
 
 	it("should not report hasAnimationPhaseChanged when phase is stable", () => {

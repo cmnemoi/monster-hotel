@@ -20,7 +20,7 @@ export class ClientBehavior {
 	private idleTimeRemaining: Duration;
 	private shouldReverseOnWalk = false;
 	private pendingIdle = false;
-	private animationPhaseChanged = false;
+	private animationPhaseChanged = true;
 
 	constructor(
 		private readonly minX: number,
