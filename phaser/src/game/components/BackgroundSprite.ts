@@ -10,7 +10,6 @@ const CITY_HEIGHT_IN_PIXELS = 1152;
 export class BackgroundSprite extends Phaser.GameObjects.Image {
 	constructor(scene: Phaser.Scene) {
 		super(scene, 0, 0, "bg");
-		scene.add.existing(this);
 		this.setOrigin(0, 0);
 		this.setScrollFactor(0);
 		this.setDepth(-1);

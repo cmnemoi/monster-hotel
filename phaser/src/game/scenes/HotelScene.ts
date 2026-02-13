@@ -21,14 +21,20 @@ export class HotelScene extends Phaser.Scene {
 	init() {
 		this.hotel = this.game.registry.get("hotel");
 		this.playlist = new Playlist(new PhaserMusicRepository(this));
-		const hotelGrid = new HotelGrid(ROOM_WIDTH, ROOM_HEIGHT);
-		this.hotelSprite = new HotelSprite(this, hotelGrid);
-		this.cameraController = new CameraController(this);
 		this.playlist.build(["intro_music", "music_1", "music_2", "music_3"]);
+
+		this.cameraController = new CameraController(this);
+		this.backgroundSprite = new BackgroundSprite(this);
+		this.hotelSprite = new HotelSprite(
+			this,
+			new HotelGrid(ROOM_WIDTH, ROOM_HEIGHT),
+		);
+
+		this.add.existing(this.backgroundSprite);
+		this.add.existing(this.hotelSprite);
 	}
 
 	create() {
-		this.backgroundSprite = new BackgroundSprite(this);
 		this.playlist.play();
 
 		this.hotelSprite.applyState(this.hotel);

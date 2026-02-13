@@ -28,15 +28,17 @@ export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	}
 
 	private renderElement(element: FacadeElement): void {
-		const image = this.scene.add.image(
+		const image = new Phaser.GameObjects.Image(
+			this.scene,
 			element.worldX,
 			element.worldY,
 			BG_ATLAS_KEY,
 			element.frameName,
 		);
-		image.setOrigin(element.originX, element.originY);
-		image.setScale(element.scaleX, element.scaleY);
-		image.setFlipX(element.flipX);
+		image
+			.setOrigin(element.originX, element.originY)
+			.setScale(element.scaleX, element.scaleY)
+			.setFlipX(element.flipX);
 		this.add(image);
 	}
 }

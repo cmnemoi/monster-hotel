@@ -16,7 +16,6 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 		this.hotelGrid = hotelGrid;
 		this.hotelFacadeSprite = new HotelFacadeSprite(scene);
 		this.add(this.hotelFacadeSprite);
-		scene.add.existing(this);
 	}
 
 	public applyState(state: Hotel) {

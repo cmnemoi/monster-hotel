@@ -31,15 +31,21 @@ export class BedroomSprite extends RoomSprite {
 		this.buildVisuals();
 		this.setGridPosition(room.position);
 		this.updateLayout(room, 1);
-		scene.add.existing(this);
 	}
 
 	private buildVisuals() {
-		this.base = this.scene.add.image(0, 0, ROOM_ATLAS_KEY, "roomNew");
+		this.base = new Phaser.GameObjects.Image(
+			this.scene,
+			0,
+			0,
+			ROOM_ATLAS_KEY,
+			"roomNew",
+		);
 		this.base.setOrigin(0, 1);
 		this.add(this.base);
 
-		this.vignette = this.scene.add.image(
+		this.vignette = new Phaser.GameObjects.Image(
+			this.scene,
 			0,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
@@ -48,7 +54,8 @@ export class BedroomSprite extends RoomSprite {
 		this.vignette.setOrigin(0, 0);
 		this.add(this.vignette);
 
-		this.wallTop = this.scene.add.image(
+		this.wallTop = new Phaser.GameObjects.Image(
+			this.scene,
 			0,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
@@ -57,7 +64,8 @@ export class BedroomSprite extends RoomSprite {
 		this.wallTop.setOrigin(0, 0);
 		this.add(this.wallTop);
 
-		this.wallLeft = this.scene.add.image(
+		this.wallLeft = new Phaser.GameObjects.Image(
+			this.scene,
 			0,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
@@ -66,7 +74,8 @@ export class BedroomSprite extends RoomSprite {
 		this.wallLeft.setOrigin(0, 0);
 		this.add(this.wallLeft);
 
-		this.wallRight = this.scene.add.image(
+		this.wallRight = new Phaser.GameObjects.Image(
+			this.scene,
 			ROOM_WIDTH,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
@@ -75,7 +84,13 @@ export class BedroomSprite extends RoomSprite {
 		this.wallRight.setOrigin(1, 0);
 		this.add(this.wallRight);
 
-		this.bottomPad = this.scene.add.image(0, 0, TILES_ATLAS_KEY, "squareBlue");
+		this.bottomPad = new Phaser.GameObjects.Image(
+			this.scene,
+			0,
+			0,
+			TILES_ATLAS_KEY,
+			"squareBlue",
+		);
 		this.bottomPad.setOrigin(0, 1);
 		this.add(this.bottomPad);
 	}

@@ -43,7 +43,6 @@ export class LobbySprite extends RoomSprite {
 		this.buildQueueClients();
 
 		this.setGridPosition(room.position);
-		scene.add.existing(this);
 	}
 
 	public updateState(_room: Room): void {}
@@ -60,12 +59,19 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildBackground() {
-		const background = this.scene.add.image(0, 0, ROOM_ATLAS_KEY, "roomLobby");
+		const background = new Phaser.GameObjects.Image(
+			this.scene,
+			0,
+			0,
+			ROOM_ATLAS_KEY,
+			"roomLobby",
+		);
 		background.setOrigin(0, 1);
 		this.add(background);
 
 		if (this.layout.tiledWallWidth > 0) {
-			const tiledWall = this.scene.add.image(
+			const tiledWall = new Phaser.GameObjects.Image(
+				this.scene,
 				LOBBY_BACKGROUND_WIDTH,
 				0,
 				TILES_ATLAS_KEY,
@@ -77,7 +83,8 @@ export class LobbySprite extends RoomSprite {
 			this.add(tiledWall);
 		}
 
-		const endPillar = this.scene.add.image(
+		const endPillar = new Phaser.GameObjects.Image(
+			this.scene,
 			this.layout.totalWidth,
 			-ROOM_HEIGHT,
 			TILES_ATLAS_KEY,
@@ -86,7 +93,13 @@ export class LobbySprite extends RoomSprite {
 		endPillar.setOrigin(1, 0);
 		this.add(endPillar);
 
-		const bottomPad = this.scene.add.image(0, 0, TILES_ATLAS_KEY, "squareBlue");
+		const bottomPad = new Phaser.GameObjects.Image(
+			this.scene,
+			0,
+			0,
+			TILES_ATLAS_KEY,
+			"squareBlue",
+		);
 		bottomPad.setOrigin(0, 1);
 		bottomPad.displayWidth = this.layout.totalWidth;
 		bottomPad.displayHeight = PADDING;
@@ -144,7 +157,8 @@ export class LobbySprite extends RoomSprite {
 		}
 
 		for (const position of this.layout.visibleWindows) {
-			const lobbyWindow = this.scene.add.image(
+			const lobbyWindow = new Phaser.GameObjects.Image(
+				this.scene,
 				position.x,
 				-ROOM_HEIGHT + 15,
 				TILES_ATLAS_KEY,
@@ -168,7 +182,8 @@ export class LobbySprite extends RoomSprite {
 			this.add(waitingPillar);
 
 			if (slot.hasTile) {
-				const waitingTile = this.scene.add.image(
+				const waitingTile = new Phaser.GameObjects.Image(
+					this.scene,
 					slot.tilePosition.x,
 					-55 - PADDING,
 					TILES_ATLAS_KEY,
