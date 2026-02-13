@@ -5,6 +5,7 @@ import { PhaserSprite } from "#phaser/game/components/PhaserSprite";
 
 export class ClientAnimation {
 	private readonly sprite: PhaserSprite;
+	private readonly config: ClientSpriteConfig;
 	private onCycleCompleteCallback: (() => void) | null = null;
 
 	constructor({
@@ -14,6 +15,7 @@ export class ClientAnimation {
 		parent: Phaser.GameObjects.Container;
 		config: ClientSpriteConfig;
 	}) {
+		this.config = config;
 		this.sprite = PhaserSprite.create(parent, {
 			assetConfig: config.assetConfig,
 		})
@@ -39,10 +41,18 @@ export class ClientAnimation {
 	}
 
 	private play(phase: "idle" | "walk"): void {
+		if (!this.hasAnimationPhase(phase)) {
+			return;
+		}
+
 		if (phase === "walk") {
 			this.sprite.playWalk();
 			return;
 		}
 		this.sprite.playIdle();
+	}
+
+	private hasAnimationPhase(phase: "idle" | "walk"): boolean {
+		return this.config.animations.animations[phase] !== undefined;
 	}
 }

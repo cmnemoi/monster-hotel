@@ -39,7 +39,7 @@ export const CLIENT_SPRITE_REGISTRY: Record<ClientType, ClientSpriteConfig> = {
 	blobling: {
 		assetConfig: SpriteAssets.monsterSlime.idle,
 		animations: SpriteAnimations.monsterSlime,
-		scale: 1,
+		scale: 0.6,
 	},
 	"floor ghost": {
 		assetConfig: SpriteAssets.ghostMask.idle,
