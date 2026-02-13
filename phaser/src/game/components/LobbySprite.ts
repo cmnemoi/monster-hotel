@@ -25,13 +25,18 @@ export class LobbySprite extends RoomSprite {
 	private readonly clientQueue: ClientInQueue[];
 	private readonly queueClientSprites: Phaser.GameObjects.Sprite[] = [];
 
-	constructor(
-		scene: Phaser.Scene,
-		room: Room,
-		hotelGrid: HotelGrid,
-		clientQueue: ClientInQueue[] = [],
-	) {
-		super(scene, room, hotelGrid);
+	constructor({
+		scene,
+		room,
+		hotelGrid,
+		clientQueue = [],
+	}: {
+		scene: Phaser.Scene;
+		room: Room;
+		hotelGrid: HotelGrid;
+		clientQueue?: ClientInQueue[];
+	}) {
+		super({ scene, room, hotelGrid });
 		this.clientQueue = clientQueue;
 		this.layout = LobbyLayout.fromQueue(clientQueue.length);
 
@@ -107,7 +112,8 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildDesk() {
-		const desk = this.scene.add.image(
+		const desk = new Phaser.GameObjects.Image(
+			this.scene,
 			55,
 			-PADDING,
 			TILES_ATLAS_KEY,
@@ -146,7 +152,8 @@ export class LobbySprite extends RoomSprite {
 
 	private buildDecorations() {
 		for (const position of this.layout.visiblePillars) {
-			const pillar = this.scene.add.image(
+			const pillar = new Phaser.GameObjects.Image(
+				this.scene,
 				position.x,
 				-PADDING,
 				TILES_ATLAS_KEY,
@@ -172,7 +179,8 @@ export class LobbySprite extends RoomSprite {
 
 	private buildWaitingQueue() {
 		for (const slot of this.layout.queueSlots) {
-			const waitingPillar = this.scene.add.image(
+			const waitingPillar = new Phaser.GameObjects.Image(
+				this.scene,
 				slot.pillarPosition.x,
 				-PADDING,
 				TILES_ATLAS_KEY,
@@ -205,16 +213,22 @@ export class LobbySprite extends RoomSprite {
 
 			const slot = this.layout.queueSlots[index];
 			if (!slot) continue;
-			const sprite = this.createQueueClientSprite(config, slot.clientPosition);
+			const sprite = this.createQueueClientSprite({
+				config,
+				position: slot.clientPosition,
+			});
 			this.queueClientSprites.push(sprite);
 			this.add(sprite);
 		}
 	}
 
-	private createQueueClientSprite(
-		config: ClientSpriteConfig,
-		position: Position,
-	): Phaser.GameObjects.Sprite {
+	private createQueueClientSprite({
+		config,
+		position,
+	}: {
+		config: ClientSpriteConfig;
+		position: Position;
+	}): Phaser.GameObjects.Sprite {
 		const animKey = `lobby.queue.${position.x}.idle`;
 		if (!this.scene.anims.exists(animKey)) {
 			this.scene.anims.create({
@@ -231,7 +245,8 @@ export class LobbySprite extends RoomSprite {
 		}
 
 		const firstFrame = `${config.idlePrefix}0000`;
-		const sprite = this.scene.add.sprite(
+		const sprite = new Phaser.GameObjects.Sprite(
+			this.scene,
 			position.x,
 			-PADDING,
 			config.atlasKey,

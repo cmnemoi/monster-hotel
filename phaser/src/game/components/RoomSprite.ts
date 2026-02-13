@@ -12,7 +12,11 @@ export abstract class RoomSprite extends Phaser.GameObjects.Container {
 	public gridPosition: Position;
 	protected readonly hotelGrid: HotelGrid;
 
-	constructor(scene: Phaser.Scene, room: Room, hotelGrid: HotelGrid) {
+	constructor({
+		scene,
+		room,
+		hotelGrid,
+	}: { scene: Phaser.Scene; room: Room; hotelGrid: HotelGrid }) {
 		super(scene, 0, 0);
 		this.id = room.id;
 		this.gridPosition = { ...room.position };

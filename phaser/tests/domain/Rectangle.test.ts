@@ -3,7 +3,11 @@ import { Rectangle } from "#phaser/domain/Rectangle";
 
 describe("Rectangle", () => {
 	it("should create a rectangle with position, width and height", () => {
-		const rectangle = Rectangle.create({ x: 10, y: 20 }, 100, 50);
+		const rectangle = Rectangle.create({
+			position: { x: 10, y: 20 },
+			width: 100,
+			height: 50,
+		});
 
 		expect(rectangle.position).toEqual({ x: 10, y: 20 });
 		expect(rectangle.width).toBe(100);
@@ -11,20 +15,36 @@ describe("Rectangle", () => {
 	});
 
 	it("should compute center position", () => {
-		const rectangle = Rectangle.create({ x: 0, y: 0 }, 200, 100);
+		const rectangle = Rectangle.create({
+			position: { x: 0, y: 0 },
+			width: 200,
+			height: 100,
+		});
 
 		expect(rectangle.center).toEqual({ x: 100, y: 50 });
 	});
 
 	it("should compute center for offset rectangle", () => {
-		const rectangle = Rectangle.create({ x: 10, y: 20 }, 100, 50);
+		const rectangle = Rectangle.create({
+			position: { x: 10, y: 20 },
+			width: 100,
+			height: 50,
+		});
 
 		expect(rectangle.center).toEqual({ x: 60, y: 45 });
 	});
 
 	it("should compute union of two rectangles", () => {
-		const a = Rectangle.create({ x: 0, y: 0 }, 100, 50);
-		const b = Rectangle.create({ x: 50, y: 25 }, 100, 50);
+		const a = Rectangle.create({
+			position: { x: 0, y: 0 },
+			width: 100,
+			height: 50,
+		});
+		const b = Rectangle.create({
+			position: { x: 50, y: 25 },
+			width: 100,
+			height: 50,
+		});
 
 		const union = a.union(b);
 
@@ -34,8 +54,16 @@ describe("Rectangle", () => {
 	});
 
 	it("should compute union when other rectangle is fully contained", () => {
-		const a = Rectangle.create({ x: 0, y: 0 }, 200, 100);
-		const b = Rectangle.create({ x: 50, y: 25 }, 50, 25);
+		const a = Rectangle.create({
+			position: { x: 0, y: 0 },
+			width: 200,
+			height: 100,
+		});
+		const b = Rectangle.create({
+			position: { x: 50, y: 25 },
+			width: 50,
+			height: 25,
+		});
 
 		const union = a.union(b);
 
@@ -45,8 +73,16 @@ describe("Rectangle", () => {
 	});
 
 	it("should compute union with negative positions", () => {
-		const a = Rectangle.create({ x: -100, y: -50 }, 100, 50);
-		const b = Rectangle.create({ x: 0, y: 0 }, 100, 50);
+		const a = Rectangle.create({
+			position: { x: -100, y: -50 },
+			width: 100,
+			height: 50,
+		});
+		const b = Rectangle.create({
+			position: { x: 0, y: 0 },
+			width: 100,
+			height: 50,
+		});
 
 		const union = a.union(b);
 
@@ -56,7 +92,11 @@ describe("Rectangle", () => {
 	});
 
 	it("should expand by padding on all sides", () => {
-		const rectangle = Rectangle.create({ x: 100, y: 100 }, 200, 100);
+		const rectangle = Rectangle.create({
+			position: { x: 100, y: 100 },
+			width: 200,
+			height: 100,
+		});
 
 		const expanded = rectangle.expand(50);
 
@@ -66,7 +106,11 @@ describe("Rectangle", () => {
 	});
 
 	it("should expand by zero and return same dimensions", () => {
-		const rectangle = Rectangle.create({ x: 10, y: 20 }, 100, 50);
+		const rectangle = Rectangle.create({
+			position: { x: 10, y: 20 },
+			width: 100,
+			height: 50,
+		});
 
 		const expanded = rectangle.expand(0);
 

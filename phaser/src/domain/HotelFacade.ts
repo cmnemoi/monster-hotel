@@ -66,15 +66,18 @@ export type FacadeElement = {
 export class HotelFacade {
 	private constructor(public readonly elements: readonly FacadeElement[]) {}
 
-	static fromOccupiedCells(
-		occupiedCells: Set<string>,
-		hotelSeed: number,
-	): HotelFacade {
+	static fromOccupiedCells({
+		occupiedCells,
+		hotelSeed,
+	}: {
+		occupiedCells: Set<string>;
+		hotelSeed: number;
+	}): HotelFacade {
 		const cells = HotelFacade.computeCells(occupiedCells);
 		const elements: FacadeElement[] = [];
 
 		for (const cell of cells) {
-			const cellElements = HotelFacade.computeCellElements(cell, hotelSeed);
+			const cellElements = HotelFacade.computeCellElements({ cell, hotelSeed });
 			elements.push(...cellElements);
 		}
 
@@ -120,10 +123,13 @@ export class HotelFacade {
 		return Array.from(facadeCellMap.values());
 	}
 
-	private static computeCellElements(
-		cell: FacadeCell,
-		hotelSeed: number,
-	): FacadeElement[] {
+	private static computeCellElements({
+		cell,
+		hotelSeed,
+	}: {
+		cell: FacadeCell;
+		hotelSeed: number;
+	}): FacadeElement[] {
 		const cellSeed = hotelSeed + cell.gridX + cell.gridY * SEED_Y_MULTIPLIER;
 		const random = new SeededRandom(cellSeed);
 
@@ -174,13 +180,16 @@ export class HotelFacade {
 				flipX: false,
 			});
 
-			const pipeScale = random.floatRange(PIPE_SCALE_MIN, PIPE_SCALE_MAX);
+			const pipeScale = random.floatRange({
+				min: PIPE_SCALE_MIN,
+				max: PIPE_SCALE_MAX,
+			});
 			elements.push({
 				frameName: random.pick(PARIS_PIPE_VARIANTS),
-				worldX: random.intRange(
-					cellLeft + PIPE_MIN_X_MARGIN,
-					cellRight - PIPE_MAX_X_MARGIN,
-				),
+				worldX: random.intRange({
+					min: cellLeft + PIPE_MIN_X_MARGIN,
+					max: cellRight - PIPE_MAX_X_MARGIN,
+				}),
 				worldY: cellTop + CEILING_PIPE_Y_OFFSET,
 				originX: 0.5,
 				originY: 0,
@@ -214,16 +223,16 @@ export class HotelFacade {
 					flipX: false,
 				});
 
-				const chimneyScale = random.floatRange(
-					CHIMNEY_SCALE_MIN,
-					CHIMNEY_SCALE_MAX,
-				);
+				const chimneyScale = random.floatRange({
+					min: CHIMNEY_SCALE_MIN,
+					max: CHIMNEY_SCALE_MAX,
+				});
 				elements.push({
 					frameName: random.pick(PARIS_CHIMNEY_VARIANTS),
-					worldX: random.intRange(
-						cellLeft + PIPE_MIN_X_MARGIN,
-						cellRight - PIPE_MAX_X_MARGIN,
-					),
+					worldX: random.intRange({
+						min: cellLeft + PIPE_MIN_X_MARGIN,
+						max: cellRight - PIPE_MAX_X_MARGIN,
+					}),
 					worldY: cellBottom + CHIMNEY_Y_OFFSET,
 					originX: 0.5,
 					originY: 1,

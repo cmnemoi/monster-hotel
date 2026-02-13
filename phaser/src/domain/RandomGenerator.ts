@@ -11,12 +11,12 @@ export interface RandomGenerator {
 	/**
 	 * Return a random integer in [min, max] inclusive.
 	 */
-	intRange(min: number, max: number): number;
+	intRange({ min, max }: { min: number; max: number }): number;
 
 	/**
 	 * Return a random float in [min, max).
 	 */
-	floatRange(min: number, max: number): number;
+	floatRange({ min, max }: { min: number; max: number }): number;
 
 	/**
 	 * Pick a random element from the given array.

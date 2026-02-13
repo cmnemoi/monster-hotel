@@ -35,14 +35,14 @@ export class SeededRandom implements RandomGenerator {
 	/**
 	 * Return a random integer in [min, max] inclusive.
 	 */
-	public intRange(min: number, max: number): number {
+	public intRange({ min, max }: { min: number; max: number }): number {
 		return Math.floor(this.next() * (max - min + 1)) + min;
 	}
 
 	/**
 	 * Return a random float in [min, max).
 	 */
-	public floatRange(min: number, max: number): number {
+	public floatRange({ min, max }: { min: number; max: number }): number {
 		return this.next() * (max - min) + min;
 	}
 
@@ -50,7 +50,7 @@ export class SeededRandom implements RandomGenerator {
 	 * Pick a random element from the given array.
 	 */
 	public pick<T>(items: readonly T[]): T {
-		const index = this.intRange(0, items.length - 1);
+		const index = this.intRange({ min: 0, max: items.length - 1 });
 		return items[index] as T;
 	}
 }

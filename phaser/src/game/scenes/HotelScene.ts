@@ -25,10 +25,13 @@ export class HotelScene extends Phaser.Scene {
 
 		this.cameraController = new CameraController(this);
 		this.backgroundSprite = new BackgroundSprite(this);
-		this.hotelSprite = new HotelSprite(
-			this,
-			new HotelGrid(ROOM_WIDTH, ROOM_HEIGHT),
-		);
+		this.hotelSprite = new HotelSprite({
+			scene: this,
+			hotelGrid: new HotelGrid({
+				roomWidth: ROOM_WIDTH,
+				roomHeight: ROOM_HEIGHT,
+			}),
+		});
 
 		this.add.existing(this.backgroundSprite);
 		this.add.existing(this.hotelSprite);

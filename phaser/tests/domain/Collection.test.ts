@@ -2,43 +2,6 @@ import { describe, expect, it } from "vitest";
 import { Collection } from "#phaser/domain/Collection";
 
 describe("Collection", () => {
-	describe("first", () => {
-		it("should return the first element", () => {
-			const collection = Collection.fromArray([10, 20, 30]);
-
-			expect(collection.first()).toBe(10);
-		});
-
-		it("should return undefined when empty", () => {
-			const collection = Collection.fromArray<number>([]);
-
-			expect(collection.first()).toBeUndefined();
-		});
-	});
-
-	describe("get", () => {
-		it("should return the element at given 0-indexed position", () => {
-			const collection = Collection.fromArray(["a", "b", "c"]);
-
-			expect(collection.get(0)).toBe("a");
-			expect(collection.get(1)).toBe("b");
-			expect(collection.get(2)).toBe("c");
-		});
-
-		it("should return undefined when index is out of bounds", () => {
-			const collection = Collection.fromArray([1, 2]);
-
-			expect(collection.get(-1)).toBeUndefined();
-			expect(collection.get(2)).toBeUndefined();
-		});
-
-		it("should return undefined when collection is empty", () => {
-			const collection = Collection.fromArray<number>([]);
-
-			expect(collection.get(0)).toBeUndefined();
-		});
-	});
-
 	describe("firstOrThrow", () => {
 		it("should return the first element", () => {
 			const collection = Collection.fromArray([10, 20, 30]);

@@ -10,18 +10,18 @@ export class CameraController {
 	}
 
 	public fitAndCenter(worldRectangle: Phaser.Geom.Rectangle) {
-		const worldBounds = Rectangle.create(
-			{ x: worldRectangle.x, y: worldRectangle.y },
-			worldRectangle.width,
-			worldRectangle.height,
-		);
+		const worldBounds = Rectangle.create({
+			position: { x: worldRectangle.x, y: worldRectangle.y },
+			width: worldRectangle.width,
+			height: worldRectangle.height,
+		});
 
-		const view = CameraView.fitToWorldBounds(
-			this.camera.width,
-			this.camera.height,
+		const view = CameraView.fitToWorldBounds({
+			viewportWidth: this.camera.width,
+			viewportHeight: this.camera.height,
 			worldBounds,
-			WORLD_PADDING_IN_PIXELS,
-		);
+			padding: WORLD_PADDING_IN_PIXELS,
+		});
 
 		this.camera.setZoom(view.zoom);
 		this.camera.centerOn(view.center.x, view.center.y);

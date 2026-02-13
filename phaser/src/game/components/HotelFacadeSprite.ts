@@ -10,7 +10,13 @@ const DEFAULT_HOTEL_SEED = 42;
 export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	private hotelSeed: number;
 
-	constructor(scene: Phaser.Scene, hotelSeed = DEFAULT_HOTEL_SEED) {
+	constructor({
+		scene,
+		hotelSeed = DEFAULT_HOTEL_SEED,
+	}: {
+		scene: Phaser.Scene;
+		hotelSeed?: number;
+	}) {
 		super(scene, 0, 0);
 		this.hotelSeed = hotelSeed;
 	}
@@ -20,7 +26,10 @@ export class HotelFacadeSprite extends Phaser.GameObjects.Container {
 	 */
 	public rebuild(occupiedCells: Set<string>): void {
 		this.removeAll(true);
-		const facade = HotelFacade.fromOccupiedCells(occupiedCells, this.hotelSeed);
+		const facade = HotelFacade.fromOccupiedCells({
+			occupiedCells,
+			hotelSeed: this.hotelSeed,
+		});
 
 		for (const element of facade.elements) {
 			this.renderElement(element);

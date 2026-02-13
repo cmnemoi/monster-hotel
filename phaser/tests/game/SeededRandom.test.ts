@@ -33,7 +33,7 @@ describe("SeededRandom", () => {
 		const random = new SeededRandom(42);
 
 		for (let index = 0; index < 100; index++) {
-			const value = random.intRange(3, 7);
+			const value = random.intRange({ min: 3, max: 7 });
 			expect(value).toBeGreaterThanOrEqual(3);
 			expect(value).toBeLessThanOrEqual(7);
 			expect(Number.isInteger(value)).toBe(true);
@@ -44,7 +44,7 @@ describe("SeededRandom", () => {
 		const random = new SeededRandom(42);
 
 		for (let index = 0; index < 100; index++) {
-			const value = random.floatRange(0.6, 1.2);
+			const value = random.floatRange({ min: 0.6, max: 1.2 });
 			expect(value).toBeGreaterThanOrEqual(0.6);
 			expect(value).toBeLessThan(1.2);
 		}

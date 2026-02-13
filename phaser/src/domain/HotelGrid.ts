@@ -1,10 +1,16 @@
 import type { Position } from "#phaser/domain/Position";
 
 export class HotelGrid {
-	constructor(
-		private readonly roomWidth: number,
-		private readonly roomHeight: number,
-	) {}
+	private readonly roomWidth: number;
+	private readonly roomHeight: number;
+
+	constructor({
+		roomWidth,
+		roomHeight,
+	}: { roomWidth: number; roomHeight: number }) {
+		this.roomWidth = roomWidth;
+		this.roomHeight = roomHeight;
+	}
 
 	toWorldPosition(gridPosition: Position): Position {
 		return {

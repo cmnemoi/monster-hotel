@@ -1,18 +1,30 @@
 import type { Position } from "#phaser/domain/Position";
 
 export class BackgroundTransform {
-	private constructor(
-		public readonly scale: number,
-		public readonly position: Position,
-	) {}
+	readonly scale: number;
+	readonly position: Position;
 
-	static fitToViewport(
-		screenWidth: number,
-		screenHeight: number,
-		imageWidth: number,
-		cityHeight: number,
-		cameraZoom: number,
-	): BackgroundTransform {
+	private constructor({
+		scale,
+		position,
+	}: { scale: number; position: Position }) {
+		this.scale = scale;
+		this.position = position;
+	}
+
+	static fitToViewport({
+		screenWidth,
+		screenHeight,
+		imageWidth,
+		cityHeight,
+		cameraZoom,
+	}: {
+		screenWidth: number;
+		screenHeight: number;
+		imageWidth: number;
+		cityHeight: number;
+		cameraZoom: number;
+	}): BackgroundTransform {
 		const viewportWidth = screenWidth / cameraZoom;
 		const viewportHeight = screenHeight / cameraZoom;
 		const scale = Math.max(
@@ -23,6 +35,6 @@ export class BackgroundTransform {
 		const x = (screenWidth - imageWidth * scale) / 2;
 		const y = (screenHeight - cityHeight * scale) / 2;
 
-		return new BackgroundTransform(scale, { x, y });
+		return new BackgroundTransform({ scale, position: { x, y } });
 	}
 }

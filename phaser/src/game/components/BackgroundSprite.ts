@@ -21,13 +21,13 @@ export class BackgroundSprite extends Phaser.GameObjects.Image {
 		const { width, height } = this.scene.scale;
 		const sourceImage = this.texture.getSourceImage();
 
-		const transform = BackgroundTransform.fitToViewport(
-			width,
-			height,
-			sourceImage.width,
-			CITY_HEIGHT_IN_PIXELS,
-			camera.zoom,
-		);
+		const transform = BackgroundTransform.fitToViewport({
+			screenWidth: width,
+			screenHeight: height,
+			imageWidth: sourceImage.width,
+			cityHeight: CITY_HEIGHT_IN_PIXELS,
+			cameraZoom: camera.zoom,
+		});
 
 		this.setScale(transform.scale);
 		this.x = transform.position.x;

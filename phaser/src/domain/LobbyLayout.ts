@@ -14,14 +14,35 @@ export type QueueSlot = {
 };
 
 export class LobbyLayout {
-	private constructor(
-		public readonly totalWidth: number,
-		public readonly slotWidth: number,
-		public readonly queueSlots: readonly QueueSlot[],
-		public readonly visiblePillars: readonly Position[],
-		public readonly visibleWindows: readonly Position[],
-		public readonly tiledWallWidth: number,
-	) {}
+	readonly totalWidth: number;
+	readonly slotWidth: number;
+	readonly queueSlots: readonly QueueSlot[];
+	readonly visiblePillars: readonly Position[];
+	readonly visibleWindows: readonly Position[];
+	readonly tiledWallWidth: number;
+
+	private constructor({
+		totalWidth,
+		slotWidth,
+		queueSlots,
+		visiblePillars,
+		visibleWindows,
+		tiledWallWidth,
+	}: {
+		totalWidth: number;
+		slotWidth: number;
+		queueSlots: readonly QueueSlot[];
+		visiblePillars: readonly Position[];
+		visibleWindows: readonly Position[];
+		tiledWallWidth: number;
+	}) {
+		this.totalWidth = totalWidth;
+		this.slotWidth = slotWidth;
+		this.queueSlots = queueSlots;
+		this.visiblePillars = visiblePillars;
+		this.visibleWindows = visibleWindows;
+		this.tiledWallWidth = tiledWallWidth;
+	}
 
 	static fromQueue(queueLength: number): LobbyLayout {
 		const slotWidth = LobbyLayout.computeSlotWidth(queueLength);
@@ -29,7 +50,10 @@ export class LobbyLayout {
 			QUEUE_START_X + queueLength * slotWidth + END_PILLAR_WIDTH;
 		const decorationBoundary = totalWidth - END_PILLAR_WIDTH;
 
-		const queueSlots = LobbyLayout.computeQueueSlots(queueLength, slotWidth);
+		const queueSlots = LobbyLayout.computeQueueSlots({
+			queueLength,
+			slotWidth,
+		});
 		const visiblePillars = DECORATION_PILLAR_POSITIONS.filter(
 			(x) => x < decorationBoundary,
 		).map((x) => ({ x, y: 0 }));
@@ -41,14 +65,14 @@ export class LobbyLayout {
 			totalWidth - LOBBY_BACKGROUND_WIDTH - END_PILLAR_WIDTH,
 		);
 
-		return new LobbyLayout(
+		return new LobbyLayout({
 			totalWidth,
 			slotWidth,
 			queueSlots,
 			visiblePillars,
 			visibleWindows,
 			tiledWallWidth,
-		);
+		});
 	}
 
 	private static computeSlotWidth(queueLength: number): number {
@@ -58,10 +82,13 @@ export class LobbyLayout {
 		return 125;
 	}
 
-	private static computeQueueSlots(
-		queueLength: number,
-		slotWidth: number,
-	): QueueSlot[] {
+	private static computeQueueSlots({
+		queueLength,
+		slotWidth,
+	}: {
+		queueLength: number;
+		slotWidth: number;
+	}): QueueSlot[] {
 		const slots: QueueSlot[] = [];
 		for (let index = 0; index <= queueLength; index++) {
 			const pillarX = QUEUE_START_X + (index - 0.5) * slotWidth;

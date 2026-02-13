@@ -1,14 +1,34 @@
 import type { Position } from "#phaser/domain/Position";
 
 export class Rectangle {
-	private constructor(
-		public readonly position: Position,
-		public readonly width: number,
-		public readonly height: number,
-	) {}
+	readonly position: Position;
+	readonly width: number;
+	readonly height: number;
 
-	static create(position: Position, width: number, height: number): Rectangle {
-		return new Rectangle(position, width, height);
+	private constructor({
+		position,
+		width,
+		height,
+	}: {
+		position: Position;
+		width: number;
+		height: number;
+	}) {
+		this.position = position;
+		this.width = width;
+		this.height = height;
+	}
+
+	static create({
+		position,
+		width,
+		height,
+	}: {
+		position: Position;
+		width: number;
+		height: number;
+	}): Rectangle {
+		return new Rectangle({ position, width, height });
 	}
 
 	get center(): Position {
@@ -29,14 +49,18 @@ export class Rectangle {
 			this.position.y + this.height,
 			other.position.y + other.height,
 		);
-		return new Rectangle({ x: minX, y: minY }, maxX - minX, maxY - minY);
+		return new Rectangle({
+			position: { x: minX, y: minY },
+			width: maxX - minX,
+			height: maxY - minY,
+		});
 	}
 
 	expand(padding: number): Rectangle {
-		return new Rectangle(
-			{ x: this.position.x - padding, y: this.position.y - padding },
-			this.width + padding * 2,
-			this.height + padding * 2,
-		);
+		return new Rectangle({
+			position: { x: this.position.x - padding, y: this.position.y - padding },
+			width: this.width + padding * 2,
+			height: this.height + padding * 2,
+		});
 	}
 }

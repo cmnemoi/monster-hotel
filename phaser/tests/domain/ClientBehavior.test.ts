@@ -94,7 +94,7 @@ describe("ClientBehavior", () => {
 		// expire idle
 		const random = new FixedRandomGenerator();
 		random.setNextFloatRangeResult(2000);
-		const behavior = new ClientBehavior(MIN_X, MAX_X, random);
+		const behavior = new ClientBehavior({ minX: MIN_X, maxX: MAX_X, random });
 		behavior.update(Duration.fromMilliseconds(2_001));
 
 		expect(behavior.state().hasAnimationPhaseChanged).toBe(true);
@@ -152,7 +152,7 @@ describe("ClientBehavior", () => {
 function givenBehaviorWithIdleExpired(): ClientBehavior {
 	const random = new FixedRandomGenerator();
 	random.setNextFloatRangeResult(2000);
-	const behavior = new ClientBehavior(MIN_X, MAX_X, random);
+	const behavior = new ClientBehavior({ minX: MIN_X, maxX: MAX_X, random });
 	behavior.update(Duration.fromMilliseconds(2_001));
 	// Clear the hasAnimationPhaseChanged flag by reading state
 	behavior.state();
@@ -162,5 +162,5 @@ function givenBehaviorWithIdleExpired(): ClientBehavior {
 function givenClientBehavior(): ClientBehavior {
 	const random = new FixedRandomGenerator();
 	random.setNextFloatRangeResult(5_000);
-	return new ClientBehavior(MIN_X, MAX_X, random);
+	return new ClientBehavior({ minX: MIN_X, maxX: MAX_X, random });
 }

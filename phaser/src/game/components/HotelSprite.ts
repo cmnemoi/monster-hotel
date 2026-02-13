@@ -11,10 +11,13 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 	private hotelFacadeSprite: HotelFacadeSprite;
 	private readonly hotelGrid: HotelGrid;
 
-	constructor(scene: Phaser.Scene, hotelGrid: HotelGrid) {
+	constructor({
+		scene,
+		hotelGrid,
+	}: { scene: Phaser.Scene; hotelGrid: HotelGrid }) {
 		super(scene, 0, 0);
 		this.hotelGrid = hotelGrid;
-		this.hotelFacadeSprite = new HotelFacadeSprite(scene);
+		this.hotelFacadeSprite = new HotelFacadeSprite({ scene });
 		this.add(this.hotelFacadeSprite);
 	}
 
@@ -25,12 +28,12 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 			let roomSprite = this.roomsById.get(room.id);
 
 			if (!roomSprite) {
-				roomSprite = createRoomSprite(
-					this.scene,
+				roomSprite = createRoomSprite({
+					scene: this.scene,
 					room,
-					this.hotelGrid,
-					state.clientQueue,
-				);
+					hotelGrid: this.hotelGrid,
+					clientQueue: state.clientQueue,
+				});
 				this.roomsById.set(room.id, roomSprite);
 				this.add(roomSprite);
 			} else {
@@ -61,7 +64,13 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 		this.hotelFacadeSprite.setDepth(-1);
 	}
 
-	public getRoomAt(gridX: number, gridY: number): RoomSprite | undefined {
+	public getRoomAt({
+		gridX,
+		gridY,
+	}: {
+		gridX: number;
+		gridY: number;
+	}): RoomSprite | undefined {
 		const id = this.roomsByPosition.get(
 			this.hotelGrid.toPositionKey({ x: gridX, y: gridY }),
 		);

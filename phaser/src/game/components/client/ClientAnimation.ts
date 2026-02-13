@@ -8,11 +8,15 @@ export class ClientAnimation {
 	private readonly walkAnimKey: string;
 	private onCycleCompleteCallback: (() => void) | null = null;
 
-	constructor(
-		scene: Phaser.Scene,
-		config: ClientSpriteConfig,
-		animationNamespace: string,
-	) {
+	constructor({
+		scene,
+		config,
+		animationNamespace,
+	}: {
+		scene: Phaser.Scene;
+		config: ClientSpriteConfig;
+		animationNamespace: string;
+	}) {
 		this.config = config;
 		this.idleAnimKey = `${animationNamespace}.idle`;
 		this.walkAnimKey = `${animationNamespace}.walk`;

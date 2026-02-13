@@ -22,11 +22,18 @@ export class ClientBehavior {
 	private pendingIdle = false;
 	private animationPhaseChanged = true;
 
-	constructor(
-		private readonly minX: number,
-		private readonly maxX: number,
-		private readonly random: RandomGenerator,
-	) {
+	private readonly minX: number;
+	private readonly maxX: number;
+	private readonly random: RandomGenerator;
+
+	constructor({
+		minX,
+		maxX,
+		random,
+	}: { minX: number; maxX: number; random: RandomGenerator }) {
+		this.minX = minX;
+		this.maxX = maxX;
+		this.random = random;
 		this.x = (minX + maxX) / 2;
 		this.idleTimeRemaining = this.randomIdleDuration();
 	}
@@ -108,7 +115,10 @@ export class ClientBehavior {
 
 	private randomIdleDuration(): Duration {
 		return Duration.fromMilliseconds(
-			this.random.floatRange(IDLE_MIN_MILLISECONDS, IDLE_MAX_MILLISECONDS),
+			this.random.floatRange({
+				min: IDLE_MIN_MILLISECONDS,
+				max: IDLE_MAX_MILLISECONDS,
+			}),
 		);
 	}
 }

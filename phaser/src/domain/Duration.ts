@@ -4,7 +4,7 @@
 export class Duration {
 	private constructor(private readonly milliseconds: number) {}
 
-	static ONE_FRAME = Duration.fromFrames(1);
+	static ONE_FRAME = Duration.fromFrames({ frames: 1 });
 
 	/**
 	 * Create a Duration from a number of milliseconds.
@@ -34,7 +34,13 @@ export class Duration {
 		return this.milliseconds;
 	}
 
-	private static fromFrames(frames: number, fps: number = 60): Duration {
+	private static fromFrames({
+		frames,
+		fps = 60,
+	}: {
+		frames: number;
+		fps?: number;
+	}): Duration {
 		return new Duration((frames * 1_000) / fps);
 	}
 }

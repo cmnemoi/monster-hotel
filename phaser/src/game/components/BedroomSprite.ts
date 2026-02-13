@@ -17,20 +17,24 @@ export class BedroomSprite extends RoomSprite {
 	private wallRight!: Phaser.GameObjects.Image;
 	private bottomPad!: Phaser.GameObjects.Image;
 
-	private layout = BedroomLayout.fromRoom(
-		{ id: "", type: "bedroom", position: { x: 0, y: 0 }, client: null },
-		1,
-		ROOM_WIDTH,
-		ROOM_HEIGHT,
-	);
+	private layout = BedroomLayout.fromRoom({
+		room: { id: "", type: "bedroom", position: { x: 0, y: 0 }, client: null },
+		roomSize: 1,
+		baseRoomWidth: ROOM_WIDTH,
+		baseRoomHeight: ROOM_HEIGHT,
+	});
 
 	private clientSprite?: ClientSprite | undefined;
 
-	constructor(scene: Phaser.Scene, room: Room, hotelGrid: HotelGrid) {
-		super(scene, room, hotelGrid);
+	constructor({
+		scene,
+		room,
+		hotelGrid,
+	}: { scene: Phaser.Scene; room: Room; hotelGrid: HotelGrid }) {
+		super({ scene, room, hotelGrid });
 		this.buildVisuals();
 		this.setGridPosition(room.position);
-		this.updateLayout(room, 1);
+		this.updateLayout({ room, roomSize: 1 });
 	}
 
 	private buildVisuals() {
@@ -95,13 +99,13 @@ export class BedroomSprite extends RoomSprite {
 		this.add(this.bottomPad);
 	}
 
-	private updateLayout(room: Room, roomSize: number) {
-		this.layout = BedroomLayout.fromRoom(
+	private updateLayout({ room, roomSize }: { room: Room; roomSize: number }) {
+		this.layout = BedroomLayout.fromRoom({
 			room,
 			roomSize,
-			ROOM_WIDTH,
-			ROOM_HEIGHT,
-		);
+			baseRoomWidth: ROOM_WIDTH,
+			baseRoomHeight: ROOM_HEIGHT,
+		});
 		this.applyLayout();
 		this.updateClient(room);
 	}
@@ -130,7 +134,7 @@ export class BedroomSprite extends RoomSprite {
 	}
 
 	public updateState(room: Room) {
-		this.updateLayout(room, 1);
+		this.updateLayout({ room, roomSize: 1 });
 	}
 
 	public override update(time: number, delta: number) {
