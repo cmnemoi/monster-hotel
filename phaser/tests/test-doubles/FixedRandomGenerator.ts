@@ -11,11 +11,6 @@ export class FixedRandomGenerator implements RandomGenerator {
 		this.floatRangeIndex = 0;
 	}
 
-	setNextIntRangeResult(...results: number[]): void {
-		this.intRangeResults = results;
-		this.intRangeIndex = 0;
-	}
-
 	next(): number {
 		return 0;
 	}
