@@ -1,0 +1,73 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.3",
+  "base_commit_sha": "28b079ce23ce12ca84daee5a0327bc1fd9752fa9",
+  "prompts": {
+    "0dddd0e11222e36b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a29dacf4ffenVaiHjFiT6KOtm",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 61,
+      "total_deletions": 60,
+      "accepted_lines": 61,
+      "overriden_lines": 0
+    },
+    "9409e1e9a750957c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a2d89daaffeeKZRMkgUkXAC6m",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 578,
+      "total_deletions": 0,
+      "accepted_lines": 536,
+      "overriden_lines": 0
+    },
+    "94109509edb09a0f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a2b211d7ffeMXldvLV8AOp0cQ",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 229,
+      "total_deletions": 0,
+      "accepted_lines": 229,
+      "overriden_lines": 0
+    },
+    "b2fb644a263c1569": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a2f1212dffeWZNc50qOwAcOMN",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 319,
+      "total_deletions": 0,
+      "accepted_lines": 299,
+      "overriden_lines": 2
+    },
+    "ef3c061f925b0561": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a33b3ec7ffeV4202eHe41qPBF",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 11,
+      "accepted_lines": 7,
+      "overriden_lines": 0
+    }
+  }
+}
