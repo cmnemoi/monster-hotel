@@ -1,6 +1,6 @@
 # AI Agent Guidelines for Monster Hotel
 
-Monster Hotel is a hotel management game. The `phaser/` folder contains a front-end proof of concept using Phaser.js (backend planned in Adonis.js).
+Monster Hotel is a hotel management game. The `phaser/` folder contains a front-end using Phaser.js (backend planned in Adonis.js).
 
 Work exclusively in [TDD](.ai/rules/tdd.md).
 

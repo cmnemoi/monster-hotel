@@ -41,6 +41,14 @@
 		{
 			"splitTerminals": [
 				{
+					"name": "phaser:e2e",
+					"commands": ["cd phaser", "yarn test:e2e"]
+				}
+			]
+		},
+		{
+			"splitTerminals": [
+				{
 					"name": "watch",
 					"commands": ["yarn dev"]
 				}
