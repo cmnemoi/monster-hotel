@@ -1,5 +1,5 @@
 import type { OriginValue } from "#phaser/domain/Origin";
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 import type {
 	SpriteAnimationDefinition,
 	SpriteAnimationState,
@@ -8,7 +8,7 @@ import type {
 
 export type PhaserSpriteConfig = {
 	entry: SpriteCatalogEntry;
-	position?: Position;
+	position?: WorldPosition;
 };
 
 export class PhaserSprite {
@@ -71,7 +71,7 @@ export class PhaserSprite {
 		return this;
 	}
 
-	public moveTo(position: Position): this {
+	public moveTo(position: WorldPosition): this {
 		this.gameObject.setPosition(position.x, position.y);
 		return this;
 	}

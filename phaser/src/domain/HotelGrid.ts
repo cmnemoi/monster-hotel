@@ -1,25 +1,25 @@
-import type { Position } from "#phaser/domain/Position";
+import type { GridPosition, WorldPosition } from "#phaser/domain/Position";
 
 export class HotelGrid {
-	private readonly roomWidth: number;
-	private readonly roomHeight: number;
+	private readonly cellWidth: number;
+	private readonly cellHeight: number;
 
 	constructor({
-		roomWidth,
-		roomHeight,
-	}: { roomWidth: number; roomHeight: number }) {
-		this.roomWidth = roomWidth;
-		this.roomHeight = roomHeight;
+		cellWidth,
+		cellHeight,
+	}: { cellWidth: number; cellHeight: number }) {
+		this.cellWidth = cellWidth;
+		this.cellHeight = cellHeight;
 	}
 
-	toWorldPosition(gridPosition: Position): Position {
+	toWorldPosition(gridPosition: GridPosition): WorldPosition {
 		return {
-			x: gridPosition.x * this.roomWidth,
-			y: -(gridPosition.y * this.roomHeight) || 0,
+			x: gridPosition.x * this.cellWidth,
+			y: -(gridPosition.y * this.cellHeight) || 0,
 		};
 	}
 
-	toPositionKey(gridPosition: Position): `${number},${number}` {
+	toPositionKey(gridPosition: GridPosition): `${number},${number}` {
 		return `${gridPosition.x},${gridPosition.y}`;
 	}
 }

@@ -1,9 +1,12 @@
 import { BedroomLayout } from "#phaser/domain/BedroomLayout";
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { Origin } from "#phaser/domain/Origin";
 import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
-import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { ClientSprite } from "./ClientSprite";
 import { PhaserImage } from "./PhaserImage";
 import { RoomSprite } from "./RoomSprite";
@@ -20,9 +23,7 @@ export class BedroomSprite extends RoomSprite {
 
 	private layout = BedroomLayout.fromRoom({
 		room: { id: "", type: "bedroom", position: { x: 0, y: 0 }, client: null },
-		roomSize: 1,
-		baseRoomWidth: ROOM_WIDTH,
-		baseRoomHeight: ROOM_HEIGHT,
+		gridSpan: 1,
 	});
 
 	private clientSprite?: ClientSprite | undefined;
@@ -35,7 +36,7 @@ export class BedroomSprite extends RoomSprite {
 		super({ scene, room, hotelGrid });
 		this.buildVisuals();
 		this.setGridPosition(room.position);
-		this.updateLayout({ room, roomSize: 1 });
+		this.updateLayout({ room, gridSpan: 1 });
 	}
 
 	private buildVisuals() {
@@ -45,22 +46,22 @@ export class BedroomSprite extends RoomSprite {
 
 		this.vignette = PhaserImage.create(this, {
 			assetConfig: ImageCatalog.roomVignetage,
-			position: { x: 0, y: -ROOM_HEIGHT },
+			position: { x: 0, y: -GRID_CELL_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.topWall = PhaserImage.create(this, {
 			assetConfig: ImageCatalog.topWall,
-			position: { x: 0, y: -ROOM_HEIGHT },
+			position: { x: 0, y: -GRID_CELL_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.leftWall = PhaserImage.create(this, {
 			assetConfig: ImageCatalog.leftWall,
-			position: { x: 0, y: -ROOM_HEIGHT },
+			position: { x: 0, y: -GRID_CELL_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.rightWall = PhaserImage.create(this, {
 			assetConfig: ImageCatalog.rightWall,
-			position: { x: ROOM_WIDTH, y: -ROOM_HEIGHT },
+			position: { x: GRID_CELL_WIDTH, y: -GRID_CELL_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
 		this.bottomPad = PhaserImage.create(this, {
@@ -68,12 +69,10 @@ export class BedroomSprite extends RoomSprite {
 		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
 
-	private updateLayout({ room, roomSize }: { room: Room; roomSize: number }) {
+	private updateLayout({ room, gridSpan }: { room: Room; gridSpan: number }) {
 		this.layout = BedroomLayout.fromRoom({
 			room,
-			roomSize,
-			baseRoomWidth: ROOM_WIDTH,
-			baseRoomHeight: ROOM_HEIGHT,
+			gridSpan,
 		});
 		this.applyLayout();
 		this.updateClient(room);
@@ -82,31 +81,31 @@ export class BedroomSprite extends RoomSprite {
 	private applyLayout() {
 		this.base
 			.moveTo({ x: 0, y: 0 })
-			.resize({ width: this.layout.roomWidth, height: this.layout.roomHeight });
+			.resize({ width: this.layout.width, height: this.layout.height });
 
 		this.vignette
-			.moveTo({ x: 0, y: -this.layout.roomHeight })
-			.resize({ width: this.layout.roomWidth, height: this.layout.roomHeight });
+			.moveTo({ x: 0, y: -this.layout.height })
+			.resize({ width: this.layout.width, height: this.layout.height });
 
 		this.topWall
-			.moveTo({ x: 0, y: -this.layout.roomHeight })
-			.resize({ width: this.layout.roomWidth });
+			.moveTo({ x: 0, y: -this.layout.height })
+			.resize({ width: this.layout.width });
 
 		this.leftWall
-			.moveTo({ x: 0, y: -this.layout.roomHeight })
-			.resize({ height: this.layout.roomHeight });
+			.moveTo({ x: 0, y: -this.layout.height })
+			.resize({ height: this.layout.height });
 
 		this.rightWall
-			.moveTo({ x: this.layout.roomWidth, y: -this.layout.roomHeight })
-			.resize({ height: this.layout.roomHeight });
+			.moveTo({ x: this.layout.width, y: -this.layout.height })
+			.resize({ height: this.layout.height });
 
 		this.bottomPad
 			.moveTo({ x: 0, y: 0 })
-			.resize({ width: this.layout.roomWidth, height: PADDING });
+			.resize({ width: this.layout.width, height: PADDING });
 	}
 
 	public updateState(room: Room) {
-		this.updateLayout({ room, roomSize: 1 });
+		this.updateLayout({ room, gridSpan: 1 });
 	}
 
 	public override update(time: number, delta: number) {
@@ -116,17 +115,17 @@ export class BedroomSprite extends RoomSprite {
 	public getWorldBounds(): Phaser.Geom.Rectangle {
 		return new Phaser.Geom.Rectangle(
 			this.x,
-			this.y - this.layout.roomHeight,
-			this.layout.roomWidth,
-			this.layout.roomHeight,
+			this.y - this.layout.height,
+			this.layout.width,
+			this.layout.height,
 		);
 	}
 
 	private updateClient(room: Room) {
-		if (this.layout.containsClient && !this.clientSprite) {
+		if (this.layout.containsClient && room.client && !this.clientSprite) {
 			this.clientSprite = ClientSprite.create(this.scene, {
-				clientType: room.client?.type,
-				roomWidth: ROOM_WIDTH,
+				clientType: room.client.type,
+				containerWidth: GRID_CELL_WIDTH,
 				roomPadding: PADDING,
 			});
 

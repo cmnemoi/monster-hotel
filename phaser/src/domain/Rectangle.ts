@@ -1,7 +1,7 @@
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 
 export class Rectangle {
-	readonly position: Position;
+	readonly position: WorldPosition;
 	readonly width: number;
 	readonly height: number;
 
@@ -10,7 +10,7 @@ export class Rectangle {
 		width,
 		height,
 	}: {
-		position: Position;
+		position: WorldPosition;
 		width: number;
 		height: number;
 	}) {
@@ -24,14 +24,14 @@ export class Rectangle {
 		width,
 		height,
 	}: {
-		position: Position;
+		position: WorldPosition;
 		width: number;
 		height: number;
 	}): Rectangle {
 		return new Rectangle({ position, width, height });
 	}
 
-	get center(): Position {
+	get center(): WorldPosition {
 		return {
 			x: this.position.x + this.width / 2,
 			y: this.position.y + this.height / 2,

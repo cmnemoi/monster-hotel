@@ -1,10 +1,10 @@
 import type { AssetConfig } from "#phaser/domain/AssetConfig";
 import type { OriginValue } from "#phaser/domain/Origin";
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 
 export type PhaserImageConfig = {
 	assetConfig: AssetConfig;
-	position?: Position;
+	position?: WorldPosition;
 };
 
 /**
@@ -66,7 +66,7 @@ export class PhaserImage {
 		return this;
 	}
 
-	public moveTo(position: Position): this {
+	public moveTo(position: WorldPosition): this {
 		this.gameObject.setPosition(position.x, position.y);
 		return this;
 	}

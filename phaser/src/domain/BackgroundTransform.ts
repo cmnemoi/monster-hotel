@@ -1,13 +1,13 @@
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 
 export class BackgroundTransform {
 	readonly scale: number;
-	readonly position: Position;
+	readonly position: WorldPosition;
 
 	private constructor({
 		scale,
 		position,
-	}: { scale: number; position: Position }) {
+	}: { scale: number; position: WorldPosition }) {
 		this.scale = scale;
 		this.position = position;
 	}

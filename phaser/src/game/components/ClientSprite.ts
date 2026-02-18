@@ -13,7 +13,7 @@ const MOVEMENT_BOUNDS_MAX_RATIO = 0.7;
 
 export type ClientSpriteParams = {
 	clientType: ClientType;
-	roomWidth: number;
+	containerWidth: number;
 	roomPadding: number;
 };
 
@@ -24,14 +24,14 @@ export class ClientSprite extends Phaser.GameObjects.Container {
 	static create(scene: Phaser.Scene, params: ClientSpriteParams): ClientSprite {
 		const config = ClientSprite.getConfigFromType(params.clientType);
 		const behavior = new ClientBehavior({
-			minX: params.roomWidth * MOVEMENT_BOUNDS_MIN_RATIO,
-			maxX: params.roomWidth * MOVEMENT_BOUNDS_MAX_RATIO,
+			minX: params.containerWidth * MOVEMENT_BOUNDS_MIN_RATIO,
+			maxX: params.containerWidth * MOVEMENT_BOUNDS_MAX_RATIO,
 			random: new SeededRandom(Date.now()),
 		});
 
 		return new ClientSprite({
 			scene,
-			x: params.roomWidth / 2,
+			x: params.containerWidth / 2,
 			y: -params.roomPadding,
 			config,
 			behavior,

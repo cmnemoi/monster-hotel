@@ -1,21 +1,23 @@
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { ClientInQueue, Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { LobbyLayout } from "#phaser/domain/LobbyLayout";
 import { Origin } from "#phaser/domain/Origin";
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
 } from "#phaser/game/config/ClientSpriteRegistry";
 import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
 import { SpriteCatalog } from "#phaser/game/config/SpriteCatalog";
-import { ROOM_HEIGHT } from "../constants";
 import { PhaserImage } from "./PhaserImage";
 import { PhaserSprite } from "./PhaserSprite";
 import { RoomSprite } from "./RoomSprite";
 
 const PADDING = 10;
-const LOBBY_BACKGROUND_WIDTH = 512;
 
 const GROOM_CHAIR_OFFSET_Y = 55;
 
@@ -56,9 +58,9 @@ export class LobbySprite extends RoomSprite {
 	public getWorldBounds(): Phaser.Geom.Rectangle {
 		return new Phaser.Geom.Rectangle(
 			this.x,
-			this.y - ROOM_HEIGHT,
+			this.y - GRID_CELL_HEIGHT,
 			this.layout.totalWidth,
-			ROOM_HEIGHT,
+			GRID_CELL_HEIGHT,
 		);
 	}
 
@@ -70,18 +72,18 @@ export class LobbySprite extends RoomSprite {
 		if (this.layout.tiledWallWidth > 0) {
 			PhaserImage.create(this, {
 				assetConfig: ImageCatalog.lobbyWallTile,
-				position: { x: LOBBY_BACKGROUND_WIDTH, y: 0 },
+				position: { x: GRID_CELL_WIDTH, y: 0 },
 			})
 				.withOrigin(Origin.BOTTOM_LEFT)
 				.withDisplaySize({
 					width: this.layout.tiledWallWidth,
-					height: ROOM_HEIGHT,
+					height: GRID_CELL_HEIGHT,
 				});
 		}
 
 		PhaserImage.create(this, {
 			assetConfig: ImageCatalog.lobbyEndPillar,
-			position: { x: this.layout.totalWidth, y: -ROOM_HEIGHT },
+			position: { x: this.layout.totalWidth, y: -GRID_CELL_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
 		PhaserImage.create(this, { assetConfig: ImageCatalog.squareBlue })
@@ -116,7 +118,7 @@ export class LobbySprite extends RoomSprite {
 		for (const position of this.layout.visibleWindows) {
 			PhaserImage.create(this, {
 				assetConfig: ImageCatalog.lobbyWindow,
-				position: { x: position.x, y: -ROOM_HEIGHT + 15 },
+				position: { x: position.x, y: -GRID_CELL_HEIGHT + 15 },
 			})
 				.withOrigin(Origin.TOP_CENTER)
 				.withScale({ x: 0.8 });
@@ -163,7 +165,7 @@ export class LobbySprite extends RoomSprite {
 		position,
 	}: {
 		config: ClientSpriteConfig;
-		position: Position;
+		position: WorldPosition;
 	}): Phaser.GameObjects.Sprite {
 		return PhaserSprite.create(this, {
 			entry: config.sprite,

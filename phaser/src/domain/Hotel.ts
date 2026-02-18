@@ -1,3 +1,5 @@
+import type { GridPosition } from "#phaser/domain/Position";
+
 export type ClientType =
 	| "poring"
 	| "nice neighbour"
@@ -33,7 +35,7 @@ export type Hotel = {
 export type Room = {
 	id: string;
 	type: RoomType;
-	position: { x: number; y: number };
+	position: GridPosition;
 	client: Client | null;
 };
 

@@ -1,6 +1,6 @@
 import type { Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
-import type { Position } from "#phaser/domain/Position";
+import type { GridPosition } from "#phaser/domain/Position";
 
 /**
  * Abstract base class for all room visual representations.
@@ -9,7 +9,7 @@ import type { Position } from "#phaser/domain/Position";
  */
 export abstract class RoomSprite extends Phaser.GameObjects.Container {
 	public readonly id: string;
-	public gridPosition: Position;
+	public gridPosition: GridPosition;
 	protected readonly hotelGrid: HotelGrid;
 
 	constructor({
@@ -23,7 +23,7 @@ export abstract class RoomSprite extends Phaser.GameObjects.Container {
 		this.hotelGrid = hotelGrid;
 	}
 
-	public setGridPosition(position: Position) {
+	public setGridPosition(position: GridPosition) {
 		this.gridPosition = { ...position };
 		const world = this.hotelGrid.toWorldPosition(position);
 		this.x = world.x;

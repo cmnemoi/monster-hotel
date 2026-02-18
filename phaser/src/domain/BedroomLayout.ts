@@ -1,38 +1,38 @@
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { Room } from "#phaser/domain/Hotel";
 
 export class BedroomLayout {
-	readonly roomWidth: number;
-	readonly roomHeight: number;
+	readonly width: number;
+	readonly height: number;
 	readonly containsClient: boolean;
 
 	private constructor({
-		roomWidth,
-		roomHeight,
+		width,
+		height,
 		containsClient,
 	}: {
-		roomWidth: number;
-		roomHeight: number;
+		width: number;
+		height: number;
 		containsClient: boolean;
 	}) {
-		this.roomWidth = roomWidth;
-		this.roomHeight = roomHeight;
+		this.width = width;
+		this.height = height;
 		this.containsClient = containsClient;
 	}
 
 	static fromRoom({
 		room,
-		roomSize,
-		baseRoomWidth,
-		baseRoomHeight,
+		gridSpan,
 	}: {
 		room: Room;
-		roomSize: number;
-		baseRoomWidth: number;
-		baseRoomHeight: number;
+		gridSpan: number;
 	}): BedroomLayout {
 		return new BedroomLayout({
-			roomWidth: baseRoomWidth * roomSize,
-			roomHeight: baseRoomHeight,
+			width: GRID_CELL_WIDTH * gridSpan,
+			height: GRID_CELL_HEIGHT,
 			containsClient: room.client !== null,
 		});
 	}

@@ -1,15 +1,15 @@
-import type { Position } from "#phaser/domain/Position";
+import { GRID_CELL_WIDTH } from "#phaser/domain/GridConstants";
+import type { WorldPosition } from "#phaser/domain/Position";
 
 const QUEUE_START_X = 400;
 const END_PILLAR_WIDTH = 300;
-const LOBBY_BACKGROUND_WIDTH = 512;
 const DECORATION_PILLAR_POSITIONS = [500, 900];
 const DECORATION_WINDOW_POSITIONS = [700, 1100];
 
 export type QueueSlot = {
-	readonly pillarPosition: Position;
-	readonly tilePosition: Position;
-	readonly clientPosition: Position;
+	readonly pillarPosition: WorldPosition;
+	readonly tilePosition: WorldPosition;
+	readonly clientPosition: WorldPosition;
 	readonly hasTile: boolean;
 };
 
@@ -17,8 +17,8 @@ export class LobbyLayout {
 	readonly totalWidth: number;
 	readonly slotWidth: number;
 	readonly queueSlots: readonly QueueSlot[];
-	readonly visiblePillars: readonly Position[];
-	readonly visibleWindows: readonly Position[];
+	readonly visiblePillars: readonly WorldPosition[];
+	readonly visibleWindows: readonly WorldPosition[];
 	readonly tiledWallWidth: number;
 
 	private constructor({
@@ -32,8 +32,8 @@ export class LobbyLayout {
 		totalWidth: number;
 		slotWidth: number;
 		queueSlots: readonly QueueSlot[];
-		visiblePillars: readonly Position[];
-		visibleWindows: readonly Position[];
+		visiblePillars: readonly WorldPosition[];
+		visibleWindows: readonly WorldPosition[];
 		tiledWallWidth: number;
 	}) {
 		this.totalWidth = totalWidth;
@@ -62,7 +62,7 @@ export class LobbyLayout {
 		).map((x) => ({ x, y: 0 }));
 		const tiledWallWidth = Math.max(
 			0,
-			totalWidth - LOBBY_BACKGROUND_WIDTH - END_PILLAR_WIDTH,
+			totalWidth - GRID_CELL_WIDTH - END_PILLAR_WIDTH,
 		);
 
 		return new LobbyLayout({

@@ -1,6 +1,9 @@
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { Hotel } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
-import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { createRoomSprite } from "./createRoomSprite";
 import { HotelFacadeSprite } from "./HotelFacadeSprite";
 import type { RoomSprite } from "./RoomSprite";
@@ -94,7 +97,12 @@ export class HotelSprite extends Phaser.GameObjects.Container {
 		}
 
 		if (!rectangle)
-			rectangle = new Phaser.Geom.Rectangle(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
+			rectangle = new Phaser.Geom.Rectangle(
+				0,
+				0,
+				GRID_CELL_WIDTH,
+				GRID_CELL_HEIGHT,
+			);
 
 		return rectangle;
 	}

@@ -133,17 +133,17 @@ describe("LobbyLayout", () => {
 		expect(layout.visibleWindows).toContainEqual({ x: 1100, y: 0 });
 	});
 
-	it("should compute tiled wall width as totalWidth - LOBBY_BACKGROUND_WIDTH - END_PILLAR_WIDTH", () => {
+	it("should compute tiled wall width as totalWidth - GRID_CELL_WIDTH - END_PILLAR_WIDTH", () => {
 		const layout = LobbyLayout.fromQueue(4);
 
-		// totalWidth = 1300, tiledWallWidth = 1300 - 512 - 300 = 488
+		// totalWidth = 1300, tiledWallWidth = 1300 - GRID_CELL_WIDTH(512) - 300 = 488
 		expect(layout.tiledWallWidth).toBe(488);
 	});
 
 	it("should return zero tiled wall width when lobby is narrow", () => {
 		const layout = LobbyLayout.fromQueue(0);
 
-		// totalWidth = 400 + 0 + 300 = 700, tiledWallWidth = 700 - 512 - 300 = -112 → 0
+		// totalWidth = 400 + 0 + 300 = 700, tiledWallWidth = 700 - GRID_CELL_WIDTH(512) - 300 = -112 -> 0
 		expect(layout.tiledWallWidth).toBe(0);
 	});
 });

@@ -1,11 +1,14 @@
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 import type { Rectangle } from "#phaser/domain/Rectangle";
 
 export class CameraView {
 	readonly zoom: number;
-	readonly center: Position;
+	readonly center: WorldPosition;
 
-	private constructor({ zoom, center }: { zoom: number; center: Position }) {
+	private constructor({
+		zoom,
+		center,
+	}: { zoom: number; center: WorldPosition }) {
 		this.zoom = zoom;
 		this.center = center;
 	}

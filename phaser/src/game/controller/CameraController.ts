@@ -1,6 +1,6 @@
 import { CameraView } from "#phaser/domain/CameraView";
+import { CAMERA_PADDING } from "#phaser/domain/GridConstants";
 import { Rectangle } from "#phaser/domain/Rectangle";
-import { WORLD_PADDING_IN_PIXELS } from "../constants";
 
 export class CameraController {
 	private camera: Phaser.Cameras.Scene2D.Camera;
@@ -20,7 +20,7 @@ export class CameraController {
 			viewportWidth: this.camera.width,
 			viewportHeight: this.camera.height,
 			worldBounds,
-			padding: WORLD_PADDING_IN_PIXELS,
+			padding: CAMERA_PADDING,
 		});
 
 		this.camera.setZoom(view.zoom);

@@ -1,10 +1,13 @@
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { Hotel } from "#phaser/domain/Hotel";
 import { HotelGrid } from "#phaser/domain/HotelGrid";
 import { Playlist } from "#phaser/domain/Playlist";
 import { PhaserMusicRepository } from "#phaser/game/repositories/PhaserMusicRepository";
 import { BackgroundSprite } from "../components/BackgroundSprite";
 import { HotelSprite } from "../components/HotelSprite";
-import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { CameraController } from "../controller/CameraController";
 
 export class HotelScene extends Phaser.Scene {
@@ -28,8 +31,8 @@ export class HotelScene extends Phaser.Scene {
 		this.hotelSprite = new HotelSprite({
 			scene: this,
 			hotelGrid: new HotelGrid({
-				roomWidth: ROOM_WIDTH,
-				roomHeight: ROOM_HEIGHT,
+				cellWidth: GRID_CELL_WIDTH,
+				cellHeight: GRID_CELL_HEIGHT,
 			}),
 		});
 

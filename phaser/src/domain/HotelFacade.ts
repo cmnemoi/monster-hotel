@@ -1,11 +1,12 @@
 import type { AssetConfig } from "#phaser/domain/AssetConfig";
+import {
+	GRID_CELL_HEIGHT,
+	GRID_CELL_WIDTH,
+} from "#phaser/domain/GridConstants";
 import type { OriginValue } from "#phaser/domain/Origin";
-import type { Position } from "#phaser/domain/Position";
+import type { WorldPosition } from "#phaser/domain/Position";
 import { SeededRandom } from "#phaser/domain/SeededRandom";
 import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
-
-const ROOM_WIDTH = 512;
-const ROOM_HEIGHT = 256;
 
 const NEIGHBOR_OFFSETS = [
 	{ dx: 1, dy: 0 },
@@ -27,7 +28,7 @@ type FacadeCell = {
 
 export type FacadeElement = {
 	assetConfig: AssetConfig;
-	position: Position;
+	position: WorldPosition;
 	origin: OriginValue;
 	scale: { x: number; y: number };
 	flipX: boolean;
@@ -103,11 +104,11 @@ export class HotelFacade {
 		const cellSeed = hotelSeed + cell.gridX + cell.gridY * SEED_Y_MULTIPLIER;
 		const random = new SeededRandom(cellSeed);
 
-		const worldX = cell.gridX * ROOM_WIDTH;
-		const worldY = -cell.gridY * ROOM_HEIGHT;
+		const worldX = cell.gridX * GRID_CELL_WIDTH;
+		const worldY = -cell.gridY * GRID_CELL_HEIGHT;
 		const cellLeft = worldX;
-		const cellRight = worldX + ROOM_WIDTH;
-		const cellTop = worldY - ROOM_HEIGHT;
+		const cellRight = worldX + GRID_CELL_WIDTH;
+		const cellTop = worldY - GRID_CELL_HEIGHT;
 		const cellBottom = worldY;
 
 		const elements: FacadeElement[] = [];

@@ -17,37 +17,31 @@ describe("BedroomLayout", () => {
 		const room = givenRoom();
 		const layout = BedroomLayout.fromRoom({
 			room,
-			roomSize: 2,
-			baseRoomWidth: 512,
-			baseRoomHeight: 256,
+			gridSpan: 2,
 		});
 
-		expect(layout.roomWidth).toBe(1024);
+		expect(layout.width).toBe(1024);
 	});
 
 	it("should use base room height", () => {
 		const room = givenRoom();
 		const layout = BedroomLayout.fromRoom({
 			room,
-			roomSize: 2,
-			baseRoomWidth: 512,
-			baseRoomHeight: 256,
+			gridSpan: 2,
 		});
 
-		expect(layout.roomHeight).toBe(256);
+		expect(layout.height).toBe(256);
 	});
 
 	it("should compute room dimensions with size 1", () => {
 		const room = givenRoom();
 		const layout = BedroomLayout.fromRoom({
 			room,
-			roomSize: 1,
-			baseRoomWidth: 512,
-			baseRoomHeight: 256,
+			gridSpan: 1,
 		});
 
-		expect(layout.roomWidth).toBe(512);
-		expect(layout.roomHeight).toBe(256);
+		expect(layout.width).toBe(512);
+		expect(layout.height).toBe(256);
 	});
 
 	it("should show client when room has a client", () => {
@@ -63,9 +57,7 @@ describe("BedroomLayout", () => {
 		});
 		const layout = BedroomLayout.fromRoom({
 			room,
-			roomSize: 1,
-			baseRoomWidth: 512,
-			baseRoomHeight: 256,
+			gridSpan: 1,
 		});
 
 		expect(layout.containsClient).toBe(true);
@@ -75,9 +67,7 @@ describe("BedroomLayout", () => {
 		const room = givenRoom({ client: null });
 		const layout = BedroomLayout.fromRoom({
 			room,
-			roomSize: 1,
-			baseRoomWidth: 512,
-			baseRoomHeight: 256,
+			gridSpan: 1,
 		});
 
 		expect(layout.containsClient).toBe(false);
