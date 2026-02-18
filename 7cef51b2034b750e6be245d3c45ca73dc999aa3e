@@ -1,0 +1,83 @@
+phaser/src/domain/HotelFacade.ts
+  1fefcf577fa07a21 5,117,119,126-130,132,134-135,142,144-145,147,152-156,158,161-162,164,166,175,177-178,180,186,188-189,191,196-202,204,207-208,212
+phaser/src/game/config/ImageCatalog.ts
+  1fefcf577fa07a21 1-36,38-89,91-95,97-101,103-107,109-110
+phaser/src/game/components/LobbySprite.ts
+  1fefcf577fa07a21 12,73,84,88,95,113,120,131,137
+phaser/src/game/components/BedroomSprite.ts
+  1fefcf577fa07a21 5,43,47,52,57,62,67
+phaser/tests/domain/Facade.test.ts
+  1fefcf577fa07a21 4,49,74,92,109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.3",
+  "base_commit_sha": "7cef51b2034b750e6be245d3c45ca73dc999aa3e",
+  "prompts": {
+    "0dddd0e11222e36b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a29dacf4ffenVaiHjFiT6KOtm",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 41,
+      "overriden_lines": 0
+    },
+    "1fefcf577fa07a21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a08842b-68d4-499e-a6b0-dc53c455c85c",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 307,
+      "total_deletions": 167,
+      "accepted_lines": 220,
+      "overriden_lines": 2
+    },
+    "862c61a9c56b9f5a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_38f21973bffeE0VCvYaPE5oZFG",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 26,
+      "total_deletions": 1,
+      "accepted_lines": 26,
+      "overriden_lines": 0
+    },
+    "9409e1e9a750957c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a2d89daaffeeKZRMkgUkXAC6m",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 324,
+      "overriden_lines": 0
+    },
+    "b2fb644a263c1569": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a2f1212dffeWZNc50qOwAcOMN",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 299,
+      "overriden_lines": 0
+    }
+  }
+}
