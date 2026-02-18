@@ -1,8 +1,8 @@
-import { Assets } from "#phaser/domain/Assets";
 import { BedroomLayout } from "#phaser/domain/BedroomLayout";
 import type { Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { Origin } from "#phaser/domain/Origin";
+import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "../constants";
 import { ClientSprite } from "./ClientSprite";
 import { PhaserImage } from "./PhaserImage";
@@ -40,31 +40,31 @@ export class BedroomSprite extends RoomSprite {
 
 	private buildVisuals() {
 		this.base = PhaserImage.create(this, {
-			assetConfig: Assets.baseRoom,
+			assetConfig: ImageCatalog.baseRoom,
 		}).withOrigin(Origin.BOTTOM_LEFT);
 
 		this.vignette = PhaserImage.create(this, {
-			assetConfig: Assets.roomVignetage,
+			assetConfig: ImageCatalog.roomVignetage,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.topWall = PhaserImage.create(this, {
-			assetConfig: Assets.topWall,
+			assetConfig: ImageCatalog.topWall,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.leftWall = PhaserImage.create(this, {
-			assetConfig: Assets.leftWall,
+			assetConfig: ImageCatalog.leftWall,
 			position: { x: 0, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_LEFT);
 
 		this.rightWall = PhaserImage.create(this, {
-			assetConfig: Assets.rightWall,
+			assetConfig: ImageCatalog.rightWall,
 			position: { x: ROOM_WIDTH, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
 		this.bottomPad = PhaserImage.create(this, {
-			assetConfig: Assets.squareBlue,
+			assetConfig: ImageCatalog.squareBlue,
 		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
 

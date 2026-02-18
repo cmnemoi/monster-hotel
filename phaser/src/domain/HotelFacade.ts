@@ -1,8 +1,8 @@
 import type { AssetConfig } from "#phaser/domain/AssetConfig";
-import { Assets } from "#phaser/domain/Assets";
-import { Origin, type OriginValue } from "#phaser/domain/Origin";
+import type { OriginValue } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
 import { SeededRandom } from "#phaser/domain/SeededRandom";
+import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
 
 const ROOM_WIDTH = 512;
 const ROOM_HEIGHT = 256;
@@ -14,38 +14,7 @@ const NEIGHBOR_OFFSETS = [
 	{ dx: 0, dy: -1 },
 ];
 
-const ROOF_X_OFFSET = -197;
-const BALCONY_X_OFFSET = -270;
-const CEILING_X_OFFSET = -247;
-const CEILING_PIPE_Y_OFFSET = 30;
-const ROOF_SCALE_Y = 0.65;
-const CHIMNEY_Y_OFFSET = -120;
 const SEED_Y_MULTIPLIER = 1000;
-
-const PIPE_MIN_X_MARGIN = 100;
-const PIPE_MAX_X_MARGIN = 200;
-const PIPE_SCALE_MIN = 0.6;
-const PIPE_SCALE_MAX = 1.2;
-const CHIMNEY_SCALE_MIN = 0.7;
-const CHIMNEY_SCALE_MAX = 1.5;
-
-const PARIS_WALL_VARIANTS = [
-	Assets.parisWallVariant0,
-	Assets.parisWallVariant1,
-	Assets.parisWallVariant2,
-] as const;
-
-const PARIS_PIPE_VARIANTS = [
-	Assets.parisPipeVariant0,
-	Assets.parisPipeVariant1,
-] as const;
-
-const PARIS_CHIMNEY_VARIANTS = [
-	Assets.parisChimneyVariant0,
-	Assets.parisChimneyVariant1,
-	Assets.parisChimneyVariant2,
-	Assets.parisChimneyVariant3,
-] as const;
 
 type FacadeCell = {
 	gridX: number;
@@ -145,47 +114,56 @@ export class HotelFacade {
 
 		if (cell.hasRoomToRight) {
 			elements.push({
-				assetConfig: Assets.parisTest,
+				assetConfig: ImageCatalog.parisTest,
 				position: { x: cellRight, y: cellBottom },
-				origin: Origin.BOTTOM_RIGHT,
+				origin: ImageCatalog.parisTest.origin,
 				scale: { x: 1, y: 1 },
 				flipX: false,
 			});
 		}
 
 		if (cell.hasRoomToLeft) {
+			const wall = random.pick([
+				ImageCatalog.parisWallVariant0,
+				ImageCatalog.parisWallVariant1,
+				ImageCatalog.parisWallVariant2,
+			]);
 			elements.push({
-				assetConfig: random.pick(PARIS_WALL_VARIANTS),
+				assetConfig: wall,
 				position: { x: cellLeft, y: cellBottom },
-				origin: Origin.BOTTOM_RIGHT,
-				scale: { x: -1, y: 1 },
+				origin: wall.origin,
+				scale: wall.scale,
 				flipX: false,
 			});
 		}
 
 		if (cell.hasRoomAbove) {
 			elements.push({
-				assetConfig: Assets.parisCeiling,
-				position: { x: cellLeft + CEILING_X_OFFSET, y: cellTop },
-				origin: Origin.TOP_LEFT,
+				assetConfig: ImageCatalog.parisCeiling,
+				position: {
+					x: cellLeft + ImageCatalog.parisCeiling.offset.x,
+					y: cellTop,
+				},
+				origin: ImageCatalog.parisCeiling.origin,
 				scale: { x: 1, y: 1 },
 				flipX: false,
 			});
 
-			const pipeScale = random.floatRange({
-				min: PIPE_SCALE_MIN,
-				max: PIPE_SCALE_MAX,
-			});
+			const pipe = random.pick([
+				ImageCatalog.parisPipeVariant0,
+				ImageCatalog.parisPipeVariant1,
+			]);
+			const pipeScale = random.floatRange({ min: 0.6, max: 1.2 });
 			elements.push({
-				assetConfig: random.pick(PARIS_PIPE_VARIANTS),
+				assetConfig: pipe,
 				position: {
 					x: random.intRange({
-						min: cellLeft + PIPE_MIN_X_MARGIN,
-						max: cellRight - PIPE_MAX_X_MARGIN,
+						min: cellLeft + 100,
+						max: cellRight - 200,
 					}),
-					y: cellTop + CEILING_PIPE_Y_OFFSET,
+					y: cellTop + 30,
 				},
-				origin: Origin.TOP_CENTER,
+				origin: pipe.origin,
 				scale: { x: pipeScale, y: pipeScale },
 				flipX: false,
 			});
@@ -194,35 +172,44 @@ export class HotelFacade {
 		if (cell.hasRoomBelow) {
 			if (cell.hasRoomAbove) {
 				elements.push({
-					assetConfig: Assets.parisBalcony,
-					position: { x: cellLeft + BALCONY_X_OFFSET, y: cellBottom },
-					origin: Origin.BOTTOM_LEFT,
+					assetConfig: ImageCatalog.parisBalcony,
+					position: {
+						x: cellLeft + ImageCatalog.parisBalcony.offset.x,
+						y: cellBottom,
+					},
+					origin: ImageCatalog.parisBalcony.origin,
 					scale: { x: 1, y: 1 },
 					flipX: false,
 				});
 			} else {
 				elements.push({
-					assetConfig: Assets.parisRoof,
-					position: { x: cellLeft + ROOF_X_OFFSET, y: cellBottom },
-					origin: Origin.BOTTOM_LEFT,
-					scale: { x: 1, y: ROOF_SCALE_Y },
+					assetConfig: ImageCatalog.parisRoof,
+					position: {
+						x: cellLeft + ImageCatalog.parisRoof.offset.x,
+						y: cellBottom,
+					},
+					origin: ImageCatalog.parisRoof.origin,
+					scale: ImageCatalog.parisRoof.scale,
 					flipX: false,
 				});
 
-				const chimneyScale = random.floatRange({
-					min: CHIMNEY_SCALE_MIN,
-					max: CHIMNEY_SCALE_MAX,
-				});
+				const chimney = random.pick([
+					ImageCatalog.parisChimneyVariant0,
+					ImageCatalog.parisChimneyVariant1,
+					ImageCatalog.parisChimneyVariant2,
+					ImageCatalog.parisChimneyVariant3,
+				]);
+				const chimneyScale = random.floatRange({ min: 0.7, max: 1.5 });
 				elements.push({
-					assetConfig: random.pick(PARIS_CHIMNEY_VARIANTS),
+					assetConfig: chimney,
 					position: {
 						x: random.intRange({
-							min: cellLeft + PIPE_MIN_X_MARGIN,
-							max: cellRight - PIPE_MAX_X_MARGIN,
+							min: cellLeft + 100,
+							max: cellRight - 200,
 						}),
-						y: cellBottom + CHIMNEY_Y_OFFSET,
+						y: cellBottom - chimney.offset.y,
 					},
-					origin: Origin.BOTTOM_CENTER,
+					origin: chimney.origin,
 					scale: { x: chimneyScale, y: chimneyScale },
 					flipX: false,
 				});

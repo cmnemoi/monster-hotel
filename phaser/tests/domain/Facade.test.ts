@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { Assets } from "#phaser/domain/Assets";
 import { HotelFacade } from "#phaser/domain/HotelFacade";
 import { Origin } from "#phaser/domain/Origin";
+import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
 
 const HOTEL_SEED = 12345;
 
@@ -46,7 +46,7 @@ describe("Facade", () => {
 		});
 
 		const wall = facade.elements.find(
-			(element) => element.assetConfig === Assets.parisTest,
+			(element) => element.assetConfig === ImageCatalog.parisTest,
 		);
 		expect(wall).toBeDefined();
 	});
@@ -71,7 +71,7 @@ describe("Facade", () => {
 		});
 
 		const ceiling = facade.elements.find(
-			(e) => e.assetConfig === Assets.parisCeiling,
+			(e) => e.assetConfig === ImageCatalog.parisCeiling,
 		);
 		expect(ceiling).toBeDefined();
 		expect(ceiling?.origin).toEqual(Origin.TOP_LEFT);
@@ -89,7 +89,7 @@ describe("Facade", () => {
 		});
 
 		const roof = facade.elements.find(
-			(e) => e.assetConfig === Assets.parisRoof,
+			(e) => e.assetConfig === ImageCatalog.parisRoof,
 		);
 		expect(roof).toBeDefined();
 
@@ -106,7 +106,7 @@ describe("Facade", () => {
 		});
 
 		const balcony = facade.elements.find(
-			(e) => e.assetConfig === Assets.parisBalcony,
+			(e) => e.assetConfig === ImageCatalog.parisBalcony,
 		);
 		expect(balcony).toBeDefined();
 	});

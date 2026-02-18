@@ -1,4 +1,3 @@
-import { Assets } from "#phaser/domain/Assets";
 import {
 	CLIENT_SPRITE_REGISTRY,
 	type ClientSpriteConfig,
@@ -10,6 +9,7 @@ import { Origin } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
 import { SpriteAnimations } from "#phaser/domain/SpriteAnimations";
 import { SpriteAssets } from "#phaser/domain/SpriteAssets";
+import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
 import { ROOM_HEIGHT } from "../constants";
 import { PhaserImage } from "./PhaserImage";
 import { PhaserSprite } from "./PhaserSprite";
@@ -64,13 +64,13 @@ export class LobbySprite extends RoomSprite {
 	}
 
 	private buildBackground() {
-		PhaserImage.create(this, { assetConfig: Assets.roomLobby }).withOrigin(
-			Origin.BOTTOM_LEFT,
-		);
+		PhaserImage.create(this, {
+			assetConfig: ImageCatalog.roomLobby,
+		}).withOrigin(Origin.BOTTOM_LEFT);
 
 		if (this.layout.tiledWallWidth > 0) {
 			PhaserImage.create(this, {
-				assetConfig: Assets.lobbyWallTile,
+				assetConfig: ImageCatalog.lobbyWallTile,
 				position: { x: LOBBY_BACKGROUND_WIDTH, y: 0 },
 			})
 				.withOrigin(Origin.BOTTOM_LEFT)
@@ -81,18 +81,18 @@ export class LobbySprite extends RoomSprite {
 		}
 
 		PhaserImage.create(this, {
-			assetConfig: Assets.lobbyEndPillar,
+			assetConfig: ImageCatalog.lobbyEndPillar,
 			position: { x: this.layout.totalWidth, y: -ROOM_HEIGHT },
 		}).withOrigin(Origin.TOP_RIGHT);
 
-		PhaserImage.create(this, { assetConfig: Assets.squareBlue })
+		PhaserImage.create(this, { assetConfig: ImageCatalog.squareBlue })
 			.withOrigin(Origin.BOTTOM_LEFT)
 			.withDisplaySize({ width: this.layout.totalWidth, height: PADDING });
 	}
 
 	private buildDesk() {
 		PhaserImage.create(this, {
-			assetConfig: Assets.lobbyDesk,
+			assetConfig: ImageCatalog.lobbyDesk,
 			position: { x: 55, y: -PADDING },
 		}).withOrigin(Origin.BOTTOM_LEFT);
 	}
@@ -110,14 +110,14 @@ export class LobbySprite extends RoomSprite {
 	private buildDecorations() {
 		for (const position of this.layout.visiblePillars) {
 			PhaserImage.create(this, {
-				assetConfig: Assets.lobbyPillar,
+				assetConfig: ImageCatalog.lobbyPillar,
 				position: { x: position.x, y: -PADDING },
 			}).withOrigin(Origin.BOTTOM_CENTER);
 		}
 
 		for (const position of this.layout.visibleWindows) {
 			PhaserImage.create(this, {
-				assetConfig: Assets.lobbyWindow,
+				assetConfig: ImageCatalog.lobbyWindow,
 				position: { x: position.x, y: -ROOM_HEIGHT + 15 },
 			})
 				.withOrigin(Origin.TOP_CENTER)
@@ -128,13 +128,13 @@ export class LobbySprite extends RoomSprite {
 	private buildWaitingQueue() {
 		for (const slot of this.layout.queueSlots) {
 			PhaserImage.create(this, {
-				assetConfig: Assets.lobbyWaitingPillar,
+				assetConfig: ImageCatalog.lobbyWaitingPillar,
 				position: { x: slot.pillarPosition.x, y: -PADDING },
 			}).withOrigin(Origin.BOTTOM_CENTER);
 
 			if (slot.hasTile) {
 				PhaserImage.create(this, {
-					assetConfig: Assets.lobbyWaitingTile,
+					assetConfig: ImageCatalog.lobbyWaitingTile,
 					position: { x: slot.tilePosition.x, y: -55 - PADDING },
 				})
 					.withOrigin(Origin.BOTTOM_LEFT)
