@@ -1,15 +1,14 @@
-import {
-	CLIENT_SPRITE_REGISTRY,
-	type ClientSpriteConfig,
-} from "#phaser/domain/ClientSpriteRegistry";
 import type { ClientInQueue, Room } from "#phaser/domain/Hotel";
 import type { HotelGrid } from "#phaser/domain/HotelGrid";
 import { LobbyLayout } from "#phaser/domain/LobbyLayout";
 import { Origin } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
-import { SpriteAnimations } from "#phaser/domain/SpriteAnimations";
-import { SpriteAssets } from "#phaser/domain/SpriteAssets";
+import {
+	CLIENT_SPRITE_REGISTRY,
+	type ClientSpriteConfig,
+} from "#phaser/game/config/ClientSpriteRegistry";
 import { ImageCatalog } from "#phaser/game/config/ImageCatalog";
+import { SpriteCatalog } from "#phaser/game/config/SpriteCatalog";
 import { ROOM_HEIGHT } from "../constants";
 import { PhaserImage } from "./PhaserImage";
 import { PhaserSprite } from "./PhaserSprite";
@@ -99,11 +98,10 @@ export class LobbySprite extends RoomSprite {
 
 	private buildGroomCat() {
 		PhaserSprite.create(this, {
-			assetConfig: SpriteAssets.groomCat.idle,
+			entry: SpriteCatalog.groomCat,
 			position: { x: 100, y: -PADDING - GROOM_CHAIR_OFFSET_Y },
 		})
 			.withOrigin(Origin.BOTTOM_CENTER)
-			.withAnimations(SpriteAnimations.groomCat)
 			.playIdle();
 	}
 
@@ -168,12 +166,11 @@ export class LobbySprite extends RoomSprite {
 		position: Position;
 	}): Phaser.GameObjects.Sprite {
 		return PhaserSprite.create(this, {
-			assetConfig: config.assetConfig,
+			entry: config.sprite,
 			position: { x: position.x, y: -PADDING },
 		})
 			.withOrigin(Origin.BOTTOM_CENTER)
 			.withScale({ x: config.scale })
-			.withAnimations(config.animations)
 			.facingLeft()
 			.playIdle().gameObject;
 	}

@@ -1,11 +1,11 @@
 import { ClientBehavior } from "#phaser/domain/ClientBehavior";
-import {
-	CLIENT_SPRITE_REGISTRY,
-	type ClientSpriteConfig,
-} from "#phaser/domain/ClientSpriteRegistry";
 import { Duration } from "#phaser/domain/Duration";
 import type { ClientType } from "#phaser/domain/Hotel";
 import { SeededRandom } from "#phaser/domain/SeededRandom";
+import {
+	CLIENT_SPRITE_REGISTRY,
+	type ClientSpriteConfig,
+} from "#phaser/game/config/ClientSpriteRegistry";
 import { ClientAnimation } from "./client/ClientAnimation";
 
 const MOVEMENT_BOUNDS_MIN_RATIO = 0.3;

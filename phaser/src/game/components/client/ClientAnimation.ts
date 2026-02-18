@@ -1,7 +1,7 @@
 import type { ClientState } from "#phaser/domain/ClientBehavior";
-import type { ClientSpriteConfig } from "#phaser/domain/ClientSpriteRegistry";
 import { Origin } from "#phaser/domain/Origin";
 import { PhaserSprite } from "#phaser/game/components/PhaserSprite";
+import type { ClientSpriteConfig } from "#phaser/game/config/ClientSpriteRegistry";
 
 export class ClientAnimation {
 	private readonly sprite: PhaserSprite;
@@ -16,12 +16,9 @@ export class ClientAnimation {
 		config: ClientSpriteConfig;
 	}) {
 		this.config = config;
-		this.sprite = PhaserSprite.create(parent, {
-			assetConfig: config.assetConfig,
-		})
+		this.sprite = PhaserSprite.create(parent, { entry: config.sprite })
 			.withOrigin(Origin.BOTTOM_CENTER)
 			.withScale({ x: config.scale })
-			.withAnimations(config.animations)
 			.on("animationrepeat", this.handleAnimationRepeat, this);
 	}
 
@@ -53,6 +50,6 @@ export class ClientAnimation {
 	}
 
 	private hasAnimationPhase(phase: "idle" | "walk"): boolean {
-		return this.config.animations.animations[phase] !== undefined;
+		return this.config.sprite.animations[phase] !== undefined;
 	}
 }

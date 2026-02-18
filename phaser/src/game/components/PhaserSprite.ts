@@ -1,14 +1,13 @@
-import type { AssetConfig } from "#phaser/domain/AssetConfig";
 import type { OriginValue } from "#phaser/domain/Origin";
 import type { Position } from "#phaser/domain/Position";
 import type {
-	SpriteAnimationCatalogEntry,
 	SpriteAnimationDefinition,
 	SpriteAnimationState,
-} from "#phaser/domain/SpriteAnimations";
+	SpriteCatalogEntry,
+} from "#phaser/game/config/SpriteCatalog";
 
 export type PhaserSpriteConfig = {
-	assetConfig: AssetConfig;
+	entry: SpriteCatalogEntry;
 	position?: Position;
 };
 
@@ -26,24 +25,25 @@ export class PhaserSprite {
 
 	private readonly scene: Phaser.Scene;
 	private readonly atlasKey: string;
-	private animationConfig: {
+	private readonly animationConfig: {
 		namespace: string;
 		definitionsByKey: Record<string, SpriteAnimationDefinition>;
-	} | null = null;
+	};
 
 	private constructor(
 		scene: Phaser.Scene,
-		{ assetConfig, position }: PhaserSpriteConfig,
+		{ entry, position }: PhaserSpriteConfig,
 	) {
 		this.scene = scene;
-		this.atlasKey = assetConfig.atlasKey;
+		this.atlasKey = entry.assets.idle.atlasKey;
 		this.gameObject = new Phaser.GameObjects.Sprite(
 			scene,
 			position?.x ?? 0,
 			position?.y ?? 0,
-			assetConfig.atlasKey,
-			assetConfig.frame,
+			entry.assets.idle.atlasKey,
+			entry.assets.idle.frame,
 		);
+		this.animationConfig = this.registerAnimations(entry);
 	}
 
 	public withOrigin(origin: OriginValue): this {
@@ -76,18 +76,40 @@ export class PhaserSprite {
 		return this;
 	}
 
-	public withAnimations(definitions: SpriteAnimationCatalogEntry): this {
-		const definitionsByKey = this.buildAnimationDefinitionsByKey(definitions);
-		this.animationConfig = {
-			namespace: definitions.namespace,
-			definitionsByKey,
-		};
+	public playIdle(ignoreIfPlaying = true): this {
+		return this.playState("idle", ignoreIfPlaying);
+	}
+
+	public playWalk(ignoreIfPlaying = true): this {
+		return this.playState("walk", ignoreIfPlaying);
+	}
+
+	public playSleep(ignoreIfPlaying = true): this {
+		return this.playState("sleep", ignoreIfPlaying);
+	}
+
+	public on(
+		event: string,
+		handler: (...args: unknown[]) => void,
+		context?: unknown,
+	): this {
+		this.gameObject.on(event, handler, context);
+		return this;
+	}
+
+	private registerAnimations(entry: SpriteCatalogEntry): {
+		namespace: string;
+		definitionsByKey: Record<string, SpriteAnimationDefinition>;
+	} {
+		const definitionsByKey: Record<string, SpriteAnimationDefinition> = {};
+
+		for (const [state, definition] of Object.entries(entry.animations)) {
+			if (!definition) continue;
+			definitionsByKey[`${entry.namespace}.${state}`] = definition;
+		}
 
 		for (const [animationKey, definition] of Object.entries(definitionsByKey)) {
-			if (this.scene.anims.exists(animationKey)) {
-				continue;
-			}
-
+			if (this.scene.anims.exists(animationKey)) continue;
 			this.scene.anims.create({
 				key: animationKey,
 				frames: this.scene.anims.generateFrameNames(this.atlasKey, {
@@ -101,61 +123,20 @@ export class PhaserSprite {
 			});
 		}
 
-		return this;
-	}
-
-	public playIdle(ignoreIfPlaying = true): this {
-		return this.playState("idle", ignoreIfPlaying);
-	}
-
-	public playWalk(ignoreIfPlaying = true): this {
-		return this.playState("walk", ignoreIfPlaying);
-	}
-
-	public playSleep(ignoreIfPlaying = true): this {
-		return this.playState("sleep", ignoreIfPlaying);
+		return { namespace: entry.namespace, definitionsByKey };
 	}
 
 	private playState(
 		state: SpriteAnimationState,
 		ignoreIfPlaying: boolean,
 	): this {
-		if (!this.animationConfig) {
-			throw new Error("Animations are not configured on this sprite.");
-		}
-
 		const animationKey = `${this.animationConfig.namespace}.${state}`;
 		if (!Object.hasOwn(this.animationConfig.definitionsByKey, animationKey)) {
 			throw new Error(
 				`Animation state "${state}" is not available for namespace "${this.animationConfig.namespace}".`,
 			);
 		}
-
 		this.gameObject.play(animationKey, ignoreIfPlaying);
-		return this;
-	}
-
-	private buildAnimationDefinitionsByKey(
-		catalogEntry: SpriteAnimationCatalogEntry,
-	): Record<string, SpriteAnimationDefinition> {
-		const definitionsByKey: Record<string, SpriteAnimationDefinition> = {};
-
-		for (const [state, definition] of Object.entries(catalogEntry.animations)) {
-			if (!definition) {
-				continue;
-			}
-			definitionsByKey[`${catalogEntry.namespace}.${state}`] = definition;
-		}
-
-		return definitionsByKey;
-	}
-
-	public on(
-		event: string,
-		handler: (...args: unknown[]) => void,
-		context?: unknown,
-	): this {
-		this.gameObject.on(event, handler, context);
 		return this;
 	}
 }
