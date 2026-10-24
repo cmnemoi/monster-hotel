@@ -5,15 +5,5 @@ services:
     container_name: monster-hotel-website
     image: ghcr.io/cmnemoi/monster-hotel:${IMAGE_TAG:-main}
     restart: unless-stopped
-    networks:
-      - traefik-proxy
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.monster-hotel.rule=Host(`${DOMAIN:-monster-hotel.cmnemoi.com}`)
-      - traefik.http.routers.monster-hotel.entrypoints=websecure
-      - traefik.http.routers.monster-hotel.tls.certresolver=letsencrypt
-      - traefik.http.services.monster-hotel.loadbalancer.server.port=80
-
-networks:
-  traefik-proxy:
-    external: true
+    # Caddy, sur l'hôte, sert le domaine et relaie vers ce port local.
+    ports: ["127.0.0.1:8100:80"]
