@@ -6,4 +6,4 @@ services:
     image: ghcr.io/cmnemoi/monster-hotel:${IMAGE_TAG:-main}
     restart: unless-stopped
     # Caddy, sur l'hôte, sert le domaine et relaie vers ce port local.
-    ports: ["127.0.0.1:8100:80"]
+    expose: ["80"]
