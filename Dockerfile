@@ -15,10 +15,11 @@ COPY phaser phaser
 
 RUN yarn phaser:build
 
-FROM nginx:stable-alpine
+# The nginx master runs unprivileged too, hence port 8080.
+FROM nginxinc/nginx-unprivileged:stable-alpine
 
 COPY --from=build /app/phaser/dist /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
